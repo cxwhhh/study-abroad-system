@@ -38,3 +38,8 @@ target/
 .idea/
 *.class
 .DS_Store
+node_modules/
+target/
+.idea/
+*.class
+.DS_Store
