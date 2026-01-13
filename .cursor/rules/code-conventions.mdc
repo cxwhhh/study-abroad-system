@@ -1,0 +1,48 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# 代码规范指南
+
+本项目遵循一套统一的代码规范，确保代码质量和一致性。
+
+## 命名规范
+
+- Java后端：
+  - 类名：大驼峰 (PascalCase)，如 `StudentService`
+  - 方法名：小驼峰 (camelCase)，如 `getStudentById`
+  - 常量：全大写下划线分隔 (SNAKE_CASE)，如 `MAX_FILE_SIZE`
+
+- Vue前端：
+  - 组件名：大驼峰 (PascalCase)，如 `ApplicationMonitor`
+  - 方法名：小驼峰 (camelCase)，如 `fetchStudentData`
+  - 变量名：小驼峰 (camelCase)，如 `studentList`
+  - 常量：小驼峰 (camelCase)，如 `apiBaseUrl`
+
+## 文件组织
+
+- Vue组件结构遵循：`<template>`, `<script>`, `<style>` 顺序
+- 单文件组件 (SFC) 应包含明确的职责
+- 公共组件放在 `components` 目录
+- 页面级组件放在 `views` 目录
+
+## API请求规范
+
+API请求采用统一的封装方式：
+- 使用 [src/utils/request.js](mdc:src/utils/request.js) 进行HTTP请求
+- API服务封装在 `src/api/` 目录下
+- 请求错误处理采用统一的拦截器处理
+
+## CSS样式规范
+
+- 使用 scoped CSS 避免样式污染
+- 遵循BEM命名规范
+- 颜色和尺寸使用统一的变量
+- 响应式设计使用媒体查询
+
+## 组件通信
+
+- 父子组件：使用props和emit
+- 跨组件：使用Vuex或Pinia状态管理
+- 全局事件：使用EventBus（适当场景）

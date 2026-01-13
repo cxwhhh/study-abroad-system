@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.service.major.MajorMapper">
+    
+    <!-- 专业字段映射 -->
+    <resultMap id="majorResultMap" type="com.study.service.major.Major">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="englishName" column="english_name"/>
+        <result property="facultyId" column="faculty_id"/>
+        <result property="schoolId" column="school_id"/>
+        <result property="code" column="code"/>
+        <result property="degreeType" column="degree_type"/>
+        <result property="duration" column="duration"/>
+        <result property="language" column="language"/>
+        <result property="description" column="description"/>
+        <result property="curriculum" column="curriculum"/>
+        <result property="careerProspects" column="career_prospects"/>
+        <result property="tuitionFee" column="tuition_fee"/>
+        <result property="scholarshipAvailable" column="scholarship_available"/>
+        <result property="rebatePercentage" column="rebate_percentage"/>
+        <result property="applicationDeadline" column="application_deadline"/>
+        <result property="startDate" column="start_date"/>
+        <result property="isPopular" column="is_popular"/>
+        <result property="admissionRequirements" column="admission_requirements"/>
+        <result property="toeflRequirement" column="toefl_requirement" jdbcType="VARCHAR"/>
+        <result property="ieltsRequirement" column="ielts_requirement"/>
+        <result property="greRequirement" column="gre_requirement" jdbcType="VARCHAR"/>
+        <result property="gmatRequirement" column="gmat_requirement" jdbcType="VARCHAR"/>
+        <result property="workExperienceRequired" column="work_experience_required" jdbcType="VARCHAR"/>
+        <result property="creditHours" column="credit_hours"/>
+        <result property="thesisRequired" column="thesis_required"/>
+        <result property="internshipAvailable" column="internship_available"/>
+        <result property="website" column="website"/>
+        <result property="brochureUrl" column="brochure_url"/>
+        <result property="createdTime" column="created_time"/>
+        <result property="updatedTime" column="updated_time"/>
+        <result property="isDeleted" column="is_deleted"/>
+        <result property="status" column="status"/>
+    </resultMap>
+    
+    <!-- 公共字段列表 -->
+    <sql id="baseColumns">
+        id, name, english_name, faculty_id, school_id, code, degree_type, duration,
+        language, description, curriculum, career_prospects, tuition_fee,
+        scholarship_available, rebate_percentage, application_deadline, start_date,
+        is_popular, admission_requirements, toefl_requirement, ielts_requirement,
+        gre_requirement, gmat_requirement, work_experience_required, credit_hours,
+        thesis_required, internship_available, website, brochure_url,
+        created_time, updated_time, is_deleted, status
+    </sql>
+    
+    <!-- 获取所有专业 -->
+    <select id="findAll" resultMap="majorResultMap">
+        SELECT <include refid="baseColumns" />
+        FROM school_programs
+        WHERE is_deleted = 0 AND status = 1
+        ORDER BY id ASC
+    </select>
+    
+    <!-- 根据ID获取专业 -->
+    <select id="findById" resultMap="majorResultMap">
+        SELECT <include refid="baseColumns" />
+        FROM school_programs
+        WHERE id = #{id} AND is_deleted = 0 AND status = 1
+    </select>
+    
+    <!-- 根据学院ID获取所有专业 -->
+    <select id="findByFacultyId" resultMap="majorResultMap">
+        SELECT <include refid="baseColumns" />
+        FROM school_programs
+        WHERE faculty_id = #{facultyId} AND is_deleted = 0 AND status = 1
+        ORDER BY id ASC
+    </select>
+    
+    <!-- 根据院校ID获取所有专业 -->
+    <select id="findBySchoolId" resultMap="majorResultMap">
+        SELECT <include refid="baseColumns" />
+        FROM school_programs
+        WHERE school_id = #{schoolId} AND is_deleted = 0 AND status = 1
+        ORDER BY id ASC
+    </select>
+    
+    <!-- 新增专业 -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO school_programs (
+            name, english_name, faculty_id, school_id, code, degree_type, duration,
+            language, description, curriculum, career_prospects, tuition_fee,
+            scholarship_available, rebate_percentage, application_deadline, start_date,
+            is_popular, admission_requirements, toefl_requirement, ielts_requirement,
+            gre_requirement, gmat_requirement, work_experience_required, credit_hours,
+            thesis_required, internship_available, website, brochure_url,
+            created_time, updated_time, is_deleted, status
+        ) VALUES (
+            #{name}, #{englishName}, #{facultyId}, #{schoolId}, #{code}, #{degreeType}, #{duration},
+            #{language}, #{description}, #{curriculum}, #{careerProspects}, #{tuitionFee},
+            #{scholarshipAvailable}, #{rebatePercentage}, #{applicationDeadline}, #{startDate},
+            #{isPopular}, #{admissionRequirements}, #{toeflRequirement}, #{ieltsRequirement},
+            #{greRequirement}, #{gmatRequirement}, #{workExperienceRequired}, #{creditHours},
+            #{thesisRequired}, #{internshipAvailable}, #{website}, #{brochureUrl},
+            NOW(), NOW(), 0, 1
+        )
+    </insert>
+    
+    <!-- 更新专业信息 -->
+    <update id="update">
+        UPDATE school_programs
+        SET name = #{name},
+            english_name = #{englishName},
+            faculty_id = #{facultyId},
+            school_id = #{schoolId},
+            code = #{code},
+            degree_type = #{degreeType},
+            duration = #{duration},
+            language = #{language},
+            description = #{description},
+            curriculum = #{curriculum},
+            career_prospects = #{careerProspects},
+            tuition_fee = #{tuitionFee},
+            scholarship_available = #{scholarshipAvailable},
+            rebate_percentage = #{rebatePercentage},
+            application_deadline = #{applicationDeadline},
+            start_date = #{startDate},
+            is_popular = #{isPopular},
+            admission_requirements = #{admissionRequirements},
+            toefl_requirement = #{toeflRequirement},
+            ielts_requirement = #{ieltsRequirement},
+            gre_requirement = #{greRequirement},
+            gmat_requirement = #{gmatRequirement},
+            work_experience_required = #{workExperienceRequired},
+            credit_hours = #{creditHours},
+            thesis_required = #{thesisRequired},
+            internship_available = #{internshipAvailable},
+            website = #{website},
+            brochure_url = #{brochureUrl},
+            updated_time = NOW()
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 删除专业 -->
+    <delete id="deleteById">
+        UPDATE school_programs SET is_deleted = 1 WHERE id = #{id}
+    </delete>
+    
+</mapper>

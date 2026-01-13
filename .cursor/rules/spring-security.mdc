@@ -1,0 +1,41 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Spring Security 安全实践指南
+
+## 安全配置
+
+- 创建 `SecurityConfig` 配置类
+- 继承 `WebSecurityConfigurerAdapter`（老版本）或使用 Bean 方法（新版本推荐）
+- 配置身份验证、授权和安全策略
+
+## 用户认证
+
+- 实现 `UserDetailsService` 接口
+- 使用 `PasswordEncoder` 保存和验证密码
+- 考虑多因素认证 (MFA) 需求
+
+## JWT 身份验证
+
+- 使用 JWT 令牌进行无状态身份验证
+- 实现 JWT 过滤器和工具类
+- 设置合理的令牌过期时间
+
+## 授权控制
+
+- 基于角色的访问控制 (RBAC)
+- URL 级别权限控制
+- 方法级别安全性 `@PreAuthorize`、`@PostAuthorize`
+- 基于表达式的访问控制
+
+## 安全最佳实践
+
+- 使用 HTTPS 传输
+- 实现 CSRF 保护
+- 防范 XSS 攻击
+- 设置安全 HTTP 标头
+- 实现密码策略
+- 限制登录失败尝试次数
+- 敏感数据存储加密

@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile保存功能测试</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fafafa;
+        }
+        .test-section h3 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        .form-row .form-group {
+            flex: 1;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        button.success {
+            background-color: #27ae60;
+        }
+        button.danger {
+            background-color: #e74c3c;
+        }
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .user-info {
+            background-color: #e7f3ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Profile保存功能测试</h1>
+        
+        <div class="user-info">
+            <h4>当前测试用户信息</h4>
+            <p><strong>用户ID:</strong> <span id="currentUserId">45</span></p>
+            <p><strong>学生ID:</strong> <span id="currentStudentId">123160</span></p>
+            <p><strong>用户名:</strong> testuser2</p>
+        </div>
+
+        <!-- 获取学生信息测试 -->
+        <div class="test-section">
+            <h3>1. 获取学生信息测试</h3>
+            <button onclick="getStudentInfo()">获取学生信息</button>
+            <div id="getResult" class="result" style="display:none;"></div>
+        </div>
+
+        <!-- 学生信息编辑表单 -->
+        <div class="test-section">
+            <h3>2. 学生信息编辑表单</h3>
+            <form id="studentForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">姓名 *</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="englishName">英文名</label>
+                        <input type="text" id="englishName" name="englishName">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="gender">性别</label>
+                        <select id="gender" name="gender">
+                            <option value="">请选择</option>
+                            <option value="男">男</option>
+                            <option value="女">女</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="birthDate">出生日期</label>
+                        <input type="date" id="birthDate" name="birthDate">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nationality">国籍</label>
+                        <input type="text" id="nationality" name="nationality">
+                    </div>
+                    <div class="form-group">
+                        <label for="passportNo">护照号</label>
+                        <input type="text" id="passportNo" name="passportNo">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="phone">电话</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">邮箱</label>
+                        <input type="email" id="email" name="email">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="wechat">微信</label>
+                        <input type="text" id="wechat" name="wechat">
+                    </div>
+                    <div class="form-group">
+                        <label for="gpa">GPA</label>
+                        <input type="number" id="gpa" name="gpa" step="0.1" min="0" max="4">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="currentSchool">当前学校</label>
+                        <input type="text" id="currentSchool" name="currentSchool">
+                    </div>
+                    <div class="form-group">
+                        <label for="major">专业</label>
+                        <input type="text" id="major" name="major">
+                    </div>
+                </div>
+            </form>
+            
+            <button onclick="saveStudentInfo()">💾 保存学生信息</button>
+            <button onclick="testNewUserSave()" class="success">🆕 测试新用户保存</button>
+            <div id="saveResult" class="result" style="display:none;"></div>
+        </div>
+
+        <!-- 完整测试流程 -->
+        <div class="test-section">
+            <h3>3. 完整测试流程</h3>
+            <button onclick="runCompleteTest()" class="success">🚀 运行完整测试</button>
+            <div id="completeTestResult" class="result" style="display:none;"></div>
+        </div>
+    </div>
+
+    <script>
+        const apiBaseURL = (window.location.protocol === 'http:' || window.location.protocol === 'https:')
+            ? `${window.location.origin}/api`
+            : 'http://localhost:8080/api';
+
+        axios.defaults.baseURL = apiBaseURL;
+        axios.defaults.headers.common['Content-Type'] = 'application/json';
+
+        let currentStudentData = null;
+
+        // 获取学生信息
+        async function getStudentInfo() {
+            const resultDiv = document.getElementById('getResult');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result info';
+            resultDiv.textContent = '正在获取学生信息...';
+
+            try {
+                const userId = document.getElementById('currentUserId').textContent;
+                const response = await axios.get(`/student/info/${userId}`);
+                
+                if (response.data.code === 200) {
+                    currentStudentData = response.data.data;
+                    fillForm(currentStudentData);
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = `✅ 获取成功！\n${JSON.stringify(response.data.data, null, 2)}`;
+                    
+                    // 更新学生ID显示
+                    document.getElementById('currentStudentId').textContent = currentStudentData.id || '未知';
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = `❌ 获取失败：${response.data.message}`;
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ 请求失败：${error.message}\n${JSON.stringify(error.response?.data, null, 2)}`;
+            }
+        }
+
+        // 填充表单
+        function fillForm(data) {
+            if (!data) return;
+            
+            document.getElementById('name').value = data.name || '';
+            document.getElementById('englishName').value = data.englishName || '';
+            document.getElementById('gender').value = data.gender || '';
+            document.getElementById('nationality').value = data.nationality || '';
+            document.getElementById('passportNo').value = data.passportNo || '';
+            document.getElementById('phone').value = data.phone || '';
+            document.getElementById('email').value = data.email || '';
+            document.getElementById('wechat').value = data.wechat || '';
+            document.getElementById('gpa').value = data.gpa || '';
+            document.getElementById('currentSchool').value = data.currentSchool || '';
+            document.getElementById('major').value = data.major || '';
+            
+            // 处理日期格式
+            if (data.birthDate) {
+                const date = new Date(data.birthDate);
+                const formattedDate = date.toISOString().split('T')[0];
+                document.getElementById('birthDate').value = formattedDate;
+            }
+        }
+
+        // 获取表单数据
+        function getFormData() {
+            const formData = {
+                name: document.getElementById('name').value,
+                englishName: document.getElementById('englishName').value,
+                gender: document.getElementById('gender').value,
+                nationality: document.getElementById('nationality').value,
+                passportNo: document.getElementById('passportNo').value,
+                phone: document.getElementById('phone').value,
+                email: document.getElementById('email').value,
+                wechat: document.getElementById('wechat').value,
+                gpa: parseFloat(document.getElementById('gpa').value) || null,
+                currentSchool: document.getElementById('currentSchool').value,
+                major: document.getElementById('major').value,
+                userId: parseInt(document.getElementById('currentUserId').textContent)
+            };
+
+            // 处理出生日期
+            const birthDate = document.getElementById('birthDate').value;
+            if (birthDate) {
+                formData.birthDate = new Date(birthDate).getTime();
+            }
+
+            // 如果有学生ID，添加到数据中
+            if (currentStudentData && currentStudentData.id) {
+                formData.id = currentStudentData.id;
+            }
+
+            return formData;
+        }
+
+        // 保存学生信息
+        async function saveStudentInfo() {
+            const resultDiv = document.getElementById('saveResult');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result info';
+            resultDiv.textContent = '正在保存学生信息...';
+
+            try {
+                const submitData = getFormData();
+                console.log('提交数据:', submitData);
+
+                let response;
+                if (submitData.id) {
+                    // 有ID，使用update接口
+                    resultDiv.textContent = '检测到学生ID，使用update接口更新...';
+                    response = await axios.put('/student/update', submitData);
+                } else {
+                    // 没有ID，使用sync接口
+                    resultDiv.textContent = '未检测到学生ID，使用sync接口同步...';
+                    response = await axios.post('/student/sync', submitData);
+                }
+
+                if (response.data.code === 200) {
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = `✅ 保存成功！\n接口：${submitData.id ? 'update' : 'sync'}\n响应：${JSON.stringify(response.data, null, 2)}`;
+                    
+                    // 重新获取数据验证
+                    setTimeout(() => {
+                        getStudentInfo();
+                    }, 1000);
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = `❌ 保存失败：${response.data.message}`;
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ 请求失败：${error.message}\n${JSON.stringify(error.response?.data, null, 2)}`;
+            }
+        }
+
+        // 测试新用户保存
+        async function testNewUserSave() {
+            const resultDiv = document.getElementById('saveResult');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result info';
+            resultDiv.textContent = '正在创建新用户并测试保存...';
+
+            try {
+                // 1. 创建新用户
+                const newUserData = {
+                    username: `testuser_${Date.now()}`,
+                    password: '123456',
+                    email: `test_${Date.now()}@example.com`
+                };
+
+                const registerResponse = await axios.post('/user/register', newUserData);
+                if (registerResponse.data.code !== 200) {
+                    throw new Error(`用户创建失败：${registerResponse.data.message}`);
+                }
+
+                const newUserId = registerResponse.data.data.id;
+                resultDiv.textContent += `\n✅ 新用户创建成功，ID: ${newUserId}`;
+
+                // 2. 为新用户保存学生信息
+                const studentData = {
+                    userId: newUserId,
+                    name: '新测试用户',
+                    englishName: 'New Test User',
+                    gender: '女',
+                    birthDate: new Date('1995-05-15').getTime(),
+                    nationality: '中国',
+                    passportNo: 'E87654321',
+                    phone: '13900139000',
+                    email: newUserData.email,
+                    wechat: newUserData.username,
+                    currentSchool: '新测试大学',
+                    major: '软件工程',
+                    gpa: 3.7
+                };
+
+                const syncResponse = await axios.post('/student/sync', studentData);
+                if (syncResponse.data.code === 200) {
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent += `\n✅ 新用户学生信息保存成功！\n${JSON.stringify(syncResponse.data.data, null, 2)}`;
+                } else {
+                    throw new Error(`学生信息保存失败：${syncResponse.data.message}`);
+                }
+
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent += `\n❌ 测试失败：${error.message}`;
+            }
+        }
+
+        // 运行完整测试
+        async function runCompleteTest() {
+            const resultDiv = document.getElementById('completeTestResult');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result info';
+            resultDiv.textContent = '开始运行完整测试流程...\n';
+
+            try {
+                // 1. 获取当前学生信息
+                resultDiv.textContent += '\n1. 获取当前学生信息...';
+                await getStudentInfo();
+                resultDiv.textContent += ' ✅ 完成';
+
+                // 2. 修改一些信息
+                resultDiv.textContent += '\n2. 修改学生信息...';
+                document.getElementById('name').value = '完整测试用户';
+                document.getElementById('phone').value = '13700137000';
+                document.getElementById('gpa').value = '3.9';
+                resultDiv.textContent += ' ✅ 完成';
+
+                // 3. 保存修改
+                resultDiv.textContent += '\n3. 保存修改...';
+                await new Promise(resolve => {
+                    saveStudentInfo();
+                    setTimeout(resolve, 2000);
+                });
+                resultDiv.textContent += ' ✅ 完成';
+
+                // 4. 验证保存结果
+                resultDiv.textContent += '\n4. 验证保存结果...';
+                const userId = document.getElementById('currentUserId').textContent;
+                const verifyResponse = await axios.get(`/student/info/${userId}`);
+                
+                if (verifyResponse.data.code === 200) {
+                    const savedData = verifyResponse.data.data;
+                    if (savedData.name === '完整测试用户' && 
+                        savedData.phone === '13700137000' && 
+                        savedData.gpa === 3.9) {
+                        resultDiv.className = 'result success';
+                        resultDiv.textContent += ' ✅ 完成\n\n🎉 完整测试流程成功！所有功能正常工作。';
+                    } else {
+                        throw new Error('数据验证失败，保存的数据与预期不符');
+                    }
+                } else {
+                    throw new Error(`验证失败：${verifyResponse.data.message}`);
+                }
+
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent += `\n❌ 测试失败：${error.message}`;
+            }
+        }
+
+        // 页面加载时自动获取学生信息
+        window.onload = function() {
+            getStudentInfo();
+        };
+    </script>
+</body>
+</html>

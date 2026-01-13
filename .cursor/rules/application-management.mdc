@@ -1,0 +1,31 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# 申请管理模块
+
+申请管理是系统的核心功能，涵盖申请创建、跟踪、材料管理等流程。
+
+## 主要组件
+
+- 申请管理主界面: [src/components/admin/application/ApplicationManagement.vue](mdc:src/components/admin/application/ApplicationManagement.vue)
+- 申请监控面板: [src/components/admin/application/ApplicationMonitor.vue](mdc:src/components/admin/application/ApplicationMonitor.vue)
+- 申请详情弹窗: [src/components/admin/application/ApplicationDetailModal.vue](mdc:src/components/admin/application/ApplicationDetailModal.vue)
+- 申请编辑弹窗: [src/components/admin/application/ApplicationEditModal.vue](mdc:src/components/admin/application/ApplicationEditModal.vue)
+- 申请材料管理: [src/components/admin/application/ApplicationMaterials.vue](mdc:src/components/admin/application/ApplicationMaterials.vue)
+
+## 数据流
+
+1. 申请列表通过 ApplicationManagement 组件显示
+2. 选中申请后，可以通过 ApplicationDetailModal 查看详情
+3. 编辑申请信息使用 ApplicationEditModal
+4. ApplicationMonitor 提供申请状态监控视图
+
+## 关键功能
+
+- 申请筛选和排序
+- 申请状态追踪
+- 材料完成度监控
+- 申请截止日期提醒
+- 申请结果管理

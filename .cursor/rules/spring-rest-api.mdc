@@ -1,0 +1,59 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Spring Boot REST API 设计指南
+
+## REST 接口设计原则
+
+- 使用名词而非动词表示资源（如 `/users` 而非 `/getUsers`）
+- 使用复数形式表示资源集合
+- 使用 HTTP 方法表达操作语义：
+  - GET：获取资源
+  - POST：创建资源
+  - PUT：全量更新资源
+  - PATCH：部分更新资源
+  - DELETE：删除资源
+- 使用嵌套资源表示关系（如 `/users/{id}/orders`）
+
+## URL 路径设计
+
+- 使用 kebab-case 命名风格（如 `/api/user-profiles`）
+- 按业务领域或功能模块组织（如 `/api/auth`、`/api/admin`）
+- 版本控制策略（如 `/api/v1/users`）
+- 避免过深的嵌套路径（不超过 3 层）
+
+## 请求与响应设计
+
+- 使用 DTO 对象封装请求和响应数据
+- 响应统一使用标准格式（如包含 status、message、data）
+- 使用 HTTP 状态码表示请求结果
+  - 2xx：成功（200 OK、201 Created、204 No Content）
+  - 4xx：客户端错误（400 Bad Request、401 Unauthorized、404 Not Found）
+  - 5xx：服务器错误（500 Internal Server Error）
+
+## 分页和排序
+
+- 使用查询参数进行分页（如 `?page=0&size=10`）
+- 使用查询参数进行排序（如 `?sort=name,asc`）
+- 响应中包含分页元数据（总记录数、总页数等）
+
+## 安全性考虑
+
+- 请求身份验证与授权
+- HTTPS 传输
+- 敏感数据加密
+- 防范 CSRF、XSS 等安全问题
+
+## 接口文档
+
+- 使用 Springdoc OpenAPI 自动生成 API 文档
+- 为每个接口添加详细的文档注释
+- 提供示例请求和响应
+
+## 错误处理
+
+- 使用 `@ControllerAdvice` 和 `@ExceptionHandler` 进行统一异常处理
+- 错误响应包含错误代码和详细信息
+- 提供有意义的错误信息

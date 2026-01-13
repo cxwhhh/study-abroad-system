@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.service.schools.SchoolMapper">
+    
+    <!-- 院校字段映射 -->
+    <resultMap id="schoolResultMap" type="com.study.service.schools.School">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="englishName" column="english_name"/>
+        <result property="country" column="country"/>
+        <result property="countryCode" column="country_code"/>
+        <result property="city" column="city"/>
+        <result property="state" column="state"/>
+        <result property="location" column="location"/>
+        <result property="campus" column="campus"/>
+        <result property="type" column="type"/>
+        <result property="ownership" column="ownership"/>
+        <result property="description" column="description"/>
+        <result property="history" column="history"/>
+        <result property="features" column="features"/>
+        <result property="worldRanking" column="world_ranking"/>
+        <result property="nationalRanking" column="national_ranking"/>
+        <result property="qsRanking" column="qs_ranking"/>
+        <result property="timesRanking" column="times_ranking"/>
+        <result property="shanghaiRanking" column="shanghai_ranking"/>
+        <result property="tuitionFee" column="tuition_fee"/>
+        <result property="rebatePercentage" column="rebate_percentage"/>
+        <result property="livingCost" column="living_cost"/>
+        <result property="currency" column="currency"/>
+        <result property="feeCurrency" column="fee_currency"/>
+        <result property="internationalStudentPercentage" column="international_student_percentage"/>
+        <result property="chineseStudentCount" column="chinese_student_count"/>
+        <result property="totalStudentCount" column="total_student_count"/>
+        <result property="studentFacultyRatio" column="student_faculty_ratio"/>
+        <result property="acceptanceRate" column="acceptance_rate"/>
+        <result property="averageGpa" column="average_gpa"/>
+        <result property="toeflRequirement" column="toefl_requirement"/>
+        <result property="ieltsRequirement" column="ielts_requirement"/>
+        <result property="greRequirement" column="gre_requirement"/>
+        <result property="gmatRequirement" column="gmat_requirement"/>
+        <result property="satRequirement" column="sat_requirement"/>
+        <result property="applicationDeadline" column="application_deadline"/>
+        <result property="website" column="website"/>
+        <result property="logoUrl" column="logo_url"/>
+        <result property="imageUrl" column="image_url"/>
+        <result property="bannerUrl" column="banner_url"/>
+        <result property="hasUndergraduate" column="has_undergraduate"/>
+        <result property="hasGraduate" column="has_graduate"/>
+        <result property="hasPhd" column="has_phd"/>
+        <result property="tags" column="tags"/>
+        <result property="studentServices" column="student_services"/>
+        <result property="housingInfo" column="housing_info"/>
+        <result property="famousAlumni" column="famous_alumni"/>
+        <result property="notablePrograms" column="notable_programs"/>
+        <result property="entryRequirement" column="entry_requirement"/>
+        <result property="scholarshipInfo" column="scholarship_info"/>
+        <result property="visaInfo" column="visa_info"/>
+        <result property="contactEmail" column="contact_email"/>
+        <result property="contactPhone" column="contact_phone"/>
+        <result property="featuredPrograms" column="featured_programs"/>
+        <result property="createdTime" column="created_time"/>
+        <result property="updatedTime" column="updated_time"/>
+        <result property="isDeleted" column="is_deleted"/>
+        <result property="status" column="status"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+    
+    <!-- 公共字段列表 -->
+    <sql id="baseColumns">
+        id, name, english_name, country, country_code, city, state, location,
+        campus, type, ownership, description, history, features,
+        world_ranking, national_ranking, qs_ranking, times_ranking, shanghai_ranking,
+        tuition_fee, rebate_percentage, living_cost, currency, fee_currency,
+        international_student_percentage, chinese_student_count, total_student_count,
+        student_faculty_ratio, acceptance_rate, average_gpa,
+        toefl_requirement, ielts_requirement, gre_requirement, gmat_requirement, sat_requirement,
+        application_deadline, website, logo_url, image_url, banner_url,
+        has_undergraduate, has_graduate, has_phd,
+        tags, student_services, housing_info, famous_alumni, notable_programs,
+        entry_requirement, scholarship_info, visa_info,
+        contact_email, contact_phone, featured_programs,
+        created_time, updated_time, is_deleted, status, created_at, updated_at
+    </sql>
+    
+    <!-- 获取所有院校 -->
+    <select id="findAll" resultMap="schoolResultMap">
+        SELECT <include refid="baseColumns" />
+        FROM schools
+        ORDER BY qs_ranking ASC, name ASC
+    </select>
+    
+    <!-- 根据ID获取院校 -->
+    <select id="findById" resultMap="schoolResultMap">
+        SELECT <include refid="baseColumns" />
+        FROM schools
+        WHERE id = #{id}
+    </select>
+    
+    <!-- 根据国家筛选院校 -->
+    <select id="findByCountry" resultMap="schoolResultMap">
+        SELECT <include refid="baseColumns" />
+        FROM schools
+        WHERE country = #{country}
+        ORDER BY qs_ranking ASC, name ASC
+    </select>
+    
+    <!-- 根据类型筛选院校 -->
+    <select id="findByType" resultMap="schoolResultMap">
+        SELECT <include refid="baseColumns" />
+        FROM schools
+        WHERE type = #{type}
+        ORDER BY qs_ranking ASC, name ASC
+    </select>
+    
+    <!-- 搜索院校 -->
+    <select id="searchByKeyword" resultMap="schoolResultMap">
+        SELECT <include refid="baseColumns" />
+        FROM schools
+        WHERE name LIKE CONCAT('%', #{keyword}, '%')
+           OR english_name LIKE CONCAT('%', #{keyword}, '%')
+           OR description LIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY qs_ranking ASC, name ASC
+    </select>
+    
+    <!-- 新增院校 -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO schools (
+            name, english_name, country, country_code, city, state, location, campus,
+            type, ownership, description, history, features,
+            world_ranking, national_ranking, qs_ranking, times_ranking, shanghai_ranking,
+            tuition_fee, rebate_percentage, living_cost, currency, fee_currency,
+            international_student_percentage, chinese_student_count, total_student_count,
+            student_faculty_ratio, acceptance_rate, average_gpa,
+            toefl_requirement, ielts_requirement, gre_requirement, gmat_requirement, sat_requirement,
+            application_deadline, website, logo_url, image_url, banner_url,
+            has_undergraduate, has_graduate, has_phd,
+            tags, student_services, housing_info, famous_alumni, notable_programs,
+            entry_requirement, scholarship_info, visa_info,
+            contact_email, contact_phone, featured_programs,
+            created_time, updated_time, is_deleted, status, created_at, updated_at
+        ) VALUES (
+            #{name}, #{englishName}, #{country}, #{countryCode}, #{city}, #{state}, #{location}, #{campus},
+            #{type}, #{ownership}, #{description}, #{history}, #{features},
+            #{worldRanking}, #{nationalRanking}, #{qsRanking}, #{timesRanking}, #{shanghaiRanking},
+            #{tuitionFee}, #{rebatePercentage}, #{livingCost}, #{currency}, #{feeCurrency},
+            #{internationalStudentPercentage}, #{chineseStudentCount}, #{totalStudentCount},
+            #{studentFacultyRatio}, #{acceptanceRate}, #{averageGpa},
+            #{toeflRequirement}, #{ieltsRequirement}, #{greRequirement}, #{gmatRequirement}, #{satRequirement},
+            #{applicationDeadline}, #{website}, #{logoUrl}, #{imageUrl}, #{bannerUrl},
+            #{hasUndergraduate}, #{hasGraduate}, #{hasPhd},
+            #{tags}, #{studentServices}, #{housingInfo}, #{famousAlumni}, #{notablePrograms},
+            #{entryRequirement}, #{scholarshipInfo}, #{visaInfo},
+            #{contactEmail}, #{contactPhone}, #{featuredPrograms},
+            NOW(), NOW(), 0, 1, NOW(), NOW()
+        )
+    </insert>
+    
+    <!-- 更新院校信息 -->
+    <update id="update">
+        UPDATE schools
+        SET name = #{name},
+            english_name = #{englishName},
+            country = #{country},
+            country_code = #{countryCode},
+            city = #{city},
+            state = #{state},
+            location = #{location},
+            campus = #{campus},
+            type = #{type},
+            ownership = #{ownership},
+            description = #{description},
+            history = #{history},
+            features = #{features},
+            world_ranking = #{worldRanking},
+            national_ranking = #{nationalRanking},
+            qs_ranking = #{qsRanking},
+            times_ranking = #{timesRanking},
+            shanghai_ranking = #{shanghaiRanking},
+            tuition_fee = #{tuitionFee},
+            rebate_percentage = #{rebatePercentage},
+            living_cost = #{livingCost},
+            currency = #{currency},
+            fee_currency = #{feeCurrency},
+            international_student_percentage = #{internationalStudentPercentage},
+            chinese_student_count = #{chineseStudentCount},
+            total_student_count = #{totalStudentCount},
+            student_faculty_ratio = #{studentFacultyRatio},
+            acceptance_rate = #{acceptanceRate},
+            average_gpa = #{averageGpa},
+            toefl_requirement = #{toeflRequirement},
+            ielts_requirement = #{ieltsRequirement},
+            gre_requirement = #{greRequirement},
+            gmat_requirement = #{gmatRequirement},
+            sat_requirement = #{satRequirement},
+            application_deadline = #{applicationDeadline},
+            website = #{website},
+            logo_url = #{logoUrl},
+            image_url = #{imageUrl},
+            banner_url = #{bannerUrl},
+            has_undergraduate = #{hasUndergraduate},
+            has_graduate = #{hasGraduate},
+            has_phd = #{hasPhd},
+            tags = #{tags},
+            student_services = #{studentServices},
+            housing_info = #{housingInfo},
+            famous_alumni = #{famousAlumni},
+            notable_programs = #{notablePrograms},
+            entry_requirement = #{entryRequirement},
+            scholarship_info = #{scholarshipInfo},
+            visa_info = #{visaInfo},
+            contact_email = #{contactEmail},
+            contact_phone = #{contactPhone},
+            featured_programs = #{featuredPrograms},
+            updated_time = NOW(),
+            updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 删除院校 -->
+    <delete id="deleteById">
+        DELETE FROM schools WHERE id = #{id}
+    </delete>
+    
+</mapper>

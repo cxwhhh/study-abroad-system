@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.service.news.NewsMapper">
+    <select id="selectList" resultType="com.study.service.news.News">
+        SELECT * FROM news ORDER BY create_time DESC
+    </select>
+
+    <select id="selectById" resultType="com.study.service.news.News">
+        SELECT * FROM news WHERE id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.study.service.news.News" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO news (title, summary, content, image_url, category, views, create_time)
+        VALUES (#{title}, #{summary}, #{content}, #{imageUrl}, #{category}, #{views}, #{createTime})
+    </insert>
+
+    <update id="updateById" parameterType="com.study.service.news.News">
+        UPDATE news
+        SET title = #{title},
+            summary = #{summary},
+            content = #{content},
+            image_url = #{imageUrl},
+            category = #{category},
+            views = #{views}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM news WHERE id = #{id}
+    </delete>
+</mapper>

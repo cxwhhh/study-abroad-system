@@ -1,0 +1,204 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# 前端性能优化指南
+
+## 组件优化
+
+### 懒加载组件
+
+使用动态导入延迟加载非关键路径上的组件：
+
+```typescript
+// ✅ 推荐：懒加载非关键组件
+const AdminDashboard = () => import('@/pages/admin/Dashboard.vue')
+
+// 在路由中使用
+const routes = [
+  {
+    path: '/admin/dashboard',
+    component: AdminDashboard
+  }
+]
+```
+
+### 使用 Suspense
+
+为异步组件提供加载状态：
+
+```vue
+<template>
+  <Suspense>
+    <template #default>
+      <AsyncComponent />
+    </template>
+    <template #fallback>
+      <LoadingSpinner />
+    </template>
+  </Suspense>
+</template>
+```
+
+### 组件分割
+
+将大型组件拆分为更小的组件，提高可维护性和性能：
+
+```vue
+<!-- ✅ 推荐：小型、专注的组件 -->
+<template>
+  <div>
+    <UserHeader :user="user" />
+    <UserDetails :user="user" />
+    <UserActivity :activities="user.activities" />
+  </div>
+</template>
+
+<!-- ❌ 避免：过大的组件 -->
+<template>
+  <div>
+    <!-- 大量嵌套的 HTML 和逻辑 -->
+  </div>
+</template>
+```
+
+## 响应式优化
+
+### 避免不必要的响应式
+
+不是所有数据都需要是响应式的：
+
+```typescript
+// ✅ 推荐：对不需要响应式的数据使用普通变量
+const API_URL = 'https://api.example.com'
+
+// ✅ 推荐：使用 shallowRef 或 shallowReactive 处理大型对象
+const userList = shallowRef([...largeUserArray])
+
+// ❌ 避免：将不需要响应式的大型数据结构包装在 ref 中
+const configurations = ref(largeConfigObject)
+```
+
+### 使用 VueUse 函数
+
+利用 VueUse 库中高性能的组合式函数：
+
+```typescript
+// ✅ 推荐：使用 VueUse 函数
+import { useLocalStorage, useDebounce, useIntersectionObserver } from '@vueuse/core'
+
+// 持久化状态
+const savedTheme = useLocalStorage('theme', 'light')
+
+// 防抖 input
+const searchQuery = ref('')
+const debouncedQuery = useDebounce(searchQuery, 500)
+
+// 元素可见性检测（用于懒加载）
+const element = ref(null)
+const isVisible = useIntersectionObserver(element)
+```
+
+## 资源优化
+
+### 图片优化
+
+使用现代图像格式和懒加载技术：
+
+```vue
+<template>
+  <!-- ✅ 推荐：使用现代图像格式和懒加载 -->
+  <img
+    src="@/assets/hero.webp"
+    loading="lazy"
+    width="800"
+    height="600"
+    alt="Hero image"
+  />
+</template>
+
+<!-- 为较大的图片使用 v-lazy 指令（需要插件支持） -->
+<img v-lazy="'@/assets/large-image.webp'" alt="Large image" />
+```
+
+### CSS 优化
+
+使用 Tailwind 的 JIT 模式减少 CSS 体积：
+
+```vue
+<template>
+  <!-- 使用 Tailwind 按需生成样式 -->
+  <div class="flex flex-col md:flex-row gap-4 p-4">
+    <div class="bg-white shadow-md rounded-lg p-6">
+      <!-- 内容... -->
+    </div>
+  </div>
+</template>
+```
+
+## 构建优化
+
+### Vite 代码分割
+
+优化 Vite 构建配置，合理分割代码：
+
+```typescript
+// vite.config.ts
+export default defineConfig({
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vue-vendor': ['vue', 'vue-router', 'pinia'],
+          'ui-vendor': ['element-plus'],
+          'utils': ['@vueuse/core', 'lodash-es'],
+        }
+      }
+    },
+    chunkSizeWarningLimit: 600
+  }
+})
+```
+
+### 预加载关键资源
+
+使用 `<link rel="preload">` 预加载关键资源：
+
+```html
+<head>
+  <!-- 预加载字体 -->
+  <link
+    rel="preload"
+    href="/fonts/inter-var.woff2"
+    as="font"
+    type="font/woff2"
+    crossorigin
+  />
+  
+  <!-- 预加载关键 CSS -->
+  <link rel="preload" href="/assets/main.css" as="style" />
+</head>
+```
+
+## Web Vitals 优化
+
+优化核心 Web Vitals 指标：
+
+### LCP（最大内容绘制）优化
+
+- 优化关键渲染路径
+- 预加载关键资源
+- 使用服务端渲染 (SSR) 或静态站点生成 (SSG)
+
+### CLS（累积布局偏移）优化
+
+- 为图片和媒体元素指定尺寸
+- 避免动态插入内容
+- 使用骨架屏占位符
+
+### FID/INP（首次输入延迟/交互到绘制延迟）优化
+
+- 减少主线程工作
+- 将长任务拆分为更小的异步任务
+- 使用 Web Workers 处理复杂计算

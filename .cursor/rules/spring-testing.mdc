@@ -1,0 +1,153 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Spring Boot 测试指南
+
+## 测试类型
+
+- 单元测试：测试单一组件功能
+- 集成测试：测试组件之间的交互
+- 端到端测试：测试整个应用流程
+
+## 单元测试
+
+- 使用 JUnit 5 和 Mockito 框架
+- 隔离被测试类的依赖
+- 只测试一个特定功能
+- 测试方法命名遵循 `should<预期结果>When<条件>` 模式
+
+```java
+@ExtendWith(MockitoExtension.class)
+class StudentServiceTest {
+    @Mock
+    private StudentRepository studentRepository;
+    
+    @InjectMocks
+    private StudentService studentService;
+    
+    @Test
+    void shouldReturnStudentWhenValidIdProvided() {
+        // Given
+        Student student = new Student();
+        student.setId(1L);
+        student.setName("张三");
+        when(studentRepository.findById(1L)).thenReturn(Optional.of(student));
+        
+        // When
+        Student result = studentService.findById(1L);
+        
+        // Then
+        assertNotNull(result);
+        assertEquals("张三", result.getName());
+    }
+}
+```
+
+## 集成测试
+
+- 使用 `@SpringBootTest` 注解
+- 指定要加载的配置类
+- 使用 TestContainers 管理外部依赖（数据库、消息队列等）
+
+```java
+@SpringBootTest
+@AutoConfigureMockMvc
+class StudentControllerIntegrationTest {
+    @Autowired
+    private MockMvc mockMvc;
+    
+    @Autowired
+    private StudentRepository studentRepository;
+    
+    @BeforeEach
+    void setup() {
+        studentRepository.deleteAll();
+    }
+    
+    @Test
+    void shouldReturnStudentWhenGetWithValidId() throws Exception {
+        // Given
+        Student student = new Student();
+        student.setName("张三");
+        student.setEmail("zhangsan@example.com");
+        Student savedStudent = studentRepository.save(student);
+        
+        // When & Then
+        mockMvc.perform(get("/api/students/" + savedStudent.getId()))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$.name").value("张三"))
+               .andExpect(jsonPath("$.email").value("zhangsan@example.com"));
+    }
+}
+```
+
+## 数据库测试
+
+- 使用 `@DataJpaTest` 注解测试 JPA 组件
+- 使用内存数据库（H2）或 TestContainers
+- 测试自定义查询方法
+
+```java
+@DataJpaTest
+class StudentRepositoryTest {
+    @Autowired
+    private StudentRepository studentRepository;
+    
+    @Test
+    void shouldFindByEmail() {
+        // Given
+        Student student = new Student();
+        student.setName("张三");
+        student.setEmail("zhangsan@example.com");
+        studentRepository.save(student);
+        
+        // When
+        Optional<Student> result = studentRepository.findByEmail("zhangsan@example.com");
+        
+        // Then
+        assertTrue(result.isPresent());
+        assertEquals("张三", result.get().getName());
+    }
+}
+```
+
+## Web 层测试
+
+- 使用 `@WebMvcTest` 注解测试控制器
+- 使用 MockMvc 模拟 HTTP 请求
+- 使用 `@MockBean` 模拟服务层
+
+```java
+@WebMvcTest(StudentController.class)
+class StudentControllerTest {
+    @Autowired
+    private MockMvc mockMvc;
+    
+    @MockBean
+    private StudentService studentService;
+    
+    @Test
+    void shouldReturnStudentWhenGetWithValidId() throws Exception {
+        // Given
+        Student student = new Student();
+        student.setId(1L);
+        student.setName("张三");
+        when(studentService.findById(1L)).thenReturn(student);
+        
+        // When & Then
+        mockMvc.perform(get("/api/students/1"))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$.id").value(1))
+               .andExpect(jsonPath("$.name").value("张三"));
+    }
+}
+```
+
+## 最佳实践
+
+- 使用 `application-test.properties` 或 `application-test.yml` 配置测试环境
+- 测试覆盖率至少达到 80%
+- 遵循 AAA 模式：Arrange（准备）、Act（执行）、Assert（断言）
+- 使用 `@DirtiesContext` 重置 Spring 上下文（谨慎使用，避免测试变慢）

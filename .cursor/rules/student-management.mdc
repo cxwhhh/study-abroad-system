@@ -1,0 +1,40 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# 学生管理模块
+
+学生管理模块负责学生信息的维护、档案管理和与申请的关联。
+
+## 前端组件
+
+- 学生管理主界面: [src/components/admin/student/StudentManagement.vue](mdc:src/components/admin/student/StudentManagement.vue)
+- 学生详情弹窗: [src/components/admin/student/StudentDetailModal.vue](mdc:src/components/admin/student/StudentDetailModal.vue)
+- 学生编辑弹窗: [src/components/admin/student/StudentEditModal.vue](mdc:src/components/admin/student/StudentEditModal.vue)
+- 添加学生弹窗: [src/components/admin/student/AddStudentModal.vue](mdc:src/components/admin/student/AddStudentModal.vue)
+
+## 数据流
+
+1. 通过 StudentManagement 组件查看所有学生列表
+2. 选中学生后，可通过 StudentDetailModal 查看详情
+3. 编辑学生信息使用 StudentEditModal
+4. 添加新学生使用 AddStudentModal
+
+## 关键功能
+
+- 学生基本信息管理
+- 学术背景记录
+- 考试成绩管理
+- 与申请的关联查看
+- 学生沟通记录
+
+## 学生档案数据
+
+学生档案包含以下关键信息：
+- 个人基本信息
+- 学术背景
+- 标准化考试成绩
+- 申请历史
+- 沟通记录
+- 文件资料

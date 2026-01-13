@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.service.files.FileMapper">
+    <insert id="insertFile" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO files (
+            file_name,
+            file_path,
+            original_name,
+            file_size,
+            file_type,
+            description,
+            user_id,
+            student_id,
+            application_id
+        ) VALUES (
+            #{fileName},
+            #{filePath},
+            #{originalName},
+            #{fileSize},
+            #{fileType},
+            #{description},
+            #{userId},
+            #{studentId},
+            #{applicationId}
+        )
+    </insert>
+
+    <select id="selectAllFiles" resultType="com.study.service.files.FileDTO">
+        SELECT
+            id,
+            file_name as fileName,
+            file_path as filePath,
+            original_name as originalName,
+            file_size as fileSize,
+            file_type as fileType,
+            description,
+            upload_time as uploadTime,
+            user_id as userId,
+            student_id as studentId,
+            application_id as applicationId
+        FROM files
+        <where>
+            <if test="userId != null">
+                user_id = #{userId}
+            </if>
+        </where>
+        ORDER BY upload_time DESC
+    </select>
+    
+    <select id="selectFilesByUserId" resultType="com.study.service.files.FileDTO">
+        SELECT
+            id,
+            file_name as fileName,
+            file_path as filePath,
+            original_name as originalName,
+            file_size as fileSize,
+            file_type as fileType,
+            description,
+            upload_time as uploadTime,
+            user_id as userId,
+            student_id as studentId,
+            application_id as applicationId
+        FROM files
+        WHERE user_id = #{userId}
+        ORDER BY upload_time DESC
+    </select>
+    
+    <!-- 根据学生ID查询文件 -->
+    <select id="selectFilesByStudentId" resultType="com.study.service.files.FileDTO">
+        SELECT
+            id,
+            file_name as fileName,
+            file_path as filePath,
+            original_name as originalName,
+            file_size as fileSize,
+            file_type as fileType,
+            description,
+            upload_time as uploadTime,
+            user_id as userId,
+            student_id as studentId,
+            application_id as applicationId
+        FROM files
+        WHERE student_id = #{studentId}
+        ORDER BY upload_time DESC
+    </select>
+    
+    <!-- 根据学生ID和申请ID查询文件 -->
+    <select id="selectFilesByStudentAndApplicationId" resultType="com.study.service.files.FileDTO">
+        SELECT
+            id,
+            file_name as fileName,
+            file_path as filePath,
+            original_name as originalName,
+            file_size as fileSize,
+            file_type as fileType,
+            description,
+            upload_time as uploadTime,
+            user_id as userId,
+            student_id as studentId,
+            application_id as applicationId
+        FROM files
+        WHERE student_id = #{studentId} AND application_id = #{applicationId}
+        ORDER BY upload_time DESC
+    </select>
+    
+    <!-- 根据文件ID查询文件 -->
+    <select id="selectFileById" resultType="com.study.service.files.FileDTO">
+        SELECT
+            id,
+            file_name as fileName,
+            file_path as filePath,
+            original_name as originalName,
+            file_size as fileSize,
+            file_type as fileType,
+            description,
+            upload_time as uploadTime,
+            user_id as userId,
+            student_id as studentId,
+            application_id as applicationId
+        FROM files
+        WHERE id = #{fileId}
+    </select>
+    
+    <!-- 根据文件ID删除文件 -->
+    <delete id="deleteFileById">
+        DELETE FROM files WHERE id = #{fileId}
+    </delete>
+</mapper>

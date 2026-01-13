@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <rect width="48" height="48" rx="8" fill="#8C1515" stroke="#8C1515" stroke-width="1"/>
+  <g transform="translate(8, 8)">
+    <!-- Stanford Tree simplified -->
+    <path d="M16 4c-2 0-4 1-6 3-2-2-4-3-6-3-3 0-4 2-4 4 0 3 2 6 5 8l5 4 5-4c3-2 5-5 5-8 0-2-1-4-4-4z" fill="#fff"/>
+    <rect x="14" y="16" width="4" height="12" fill="#8B4513"/>
+    <text x="16" y="30" text-anchor="middle" font-family="serif" font-size="6" fill="#fff" font-weight="bold">S</text>
+  </g>
+</svg>

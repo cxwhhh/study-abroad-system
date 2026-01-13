@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.service.imagesload.ImageMapper">
+    <insert id="insertImage">
+        INSERT INTO images (
+            image_name,
+            file_path,
+            original_name,
+            file_size,
+            file_type,
+            user_id,
+            upload_time
+        ) VALUES (
+            #{imageName},
+            #{filePath},
+            #{originalName},
+            #{fileSize},
+            #{fileType},
+            #{userId},
+            NOW()
+        )
+    </insert>
+
+    <select id="selectAllImages" resultType="com.study.service.imagesload.ImageDTO">
+        SELECT
+            id,
+            image_name as imageName,
+            file_path as filePath,
+            original_name as originalName,
+            file_size as fileSize,
+            file_type as fileType,
+            user_id as userId,
+            upload_time as uploadTime
+        FROM images
+        WHERE user_id = #{userId} OR #{userId} IS NULL
+        ORDER BY upload_time DESC
+    </select>
+
+    <select id="selectAllImagesWithoutUser" resultType="com.study.service.imagesload.ImageDTO">
+        SELECT
+            id,
+            image_name as imageName,
+            file_path as filePath,
+            original_name as originalName,
+            file_size as fileSize,
+            file_type as fileType,
+            user_id as userId,
+            upload_time as uploadTime
+        FROM images
+        ORDER BY upload_time DESC
+    </select>
+</mapper> 

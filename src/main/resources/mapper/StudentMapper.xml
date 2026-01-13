@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.service.students.StudentMapper">
+    
+    <resultMap id="StudentMap" type="com.study.service.students.Student">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="name" property="name"/>
+        <result column="english_name" property="englishName"/>
+        <result column="gender" property="gender"/>
+        <result column="birth_date" property="birthDate"/>
+        <result column="nationality" property="nationality"/>
+        <result column="passport_no" property="passportNo"/>
+        <result column="phone" property="phone"/>
+        <result column="email" property="email"/>
+        <result column="wechat" property="wechat"/>
+        <result column="current_school" property="currentSchool"/>
+        <result column="major" property="major"/>
+        <result column="gpa" property="gpa"/>
+        <result column="gpa_scale" property="gpaScale"/>
+        <result column="toefl" property="toefl"/>
+        <result column="ielts" property="ielts"/>
+        <result column="gre" property="gre"/>
+        <result column="gmat" property="gmat"/>
+        <result column="application_status" property="applicationStatus"/>
+        <result column="application_progress" property="applicationProgress"/>
+        <result column="current_step" property="currentStep"/>
+        <result column="target_countries" property="targetCountries"/>
+        <result column="advisor_id" property="advisorId"/>
+        <result column="notes" property="notes"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+    
+    <select id="getStudentByUserId" resultType="com.study.service.students.Student">
+        SELECT 
+            id,
+            user_id,
+            name,
+            english_name,
+            gender,
+            birth_date,
+            nationality,
+            passport_no,
+            phone,
+            email,
+            wechat,
+            current_school,
+            major,
+            gpa,
+            gpa_scale,
+            toefl,
+            ielts,
+            gre,
+            gmat,
+            application_status,
+            application_progress,
+            current_step,
+            target_countries,
+            advisor_id,
+            notes,
+            create_time,
+            update_time
+        FROM students
+        WHERE user_id = #{userId}
+    </select>
+    
+    <update id="updateStudent" parameterType="com.study.service.students.Student">
+        UPDATE students
+        SET 
+            user_id = #{userId},
+            name = #{name},
+            english_name = #{englishName},
+            gender = #{gender},
+            birth_date = #{birthDate,jdbcType=DATE},
+            nationality = #{nationality},
+            passport_no = #{passportNo},
+            phone = #{phone},
+            email = #{email},
+            wechat = #{wechat},
+            current_school = #{currentSchool},
+            major = #{major},
+            gpa = #{gpa},
+            gpa_scale = #{gpaScale},
+            toefl = #{toefl},
+            ielts = #{ielts},
+            gre = #{gre},
+            gmat = #{gmat},
+            application_status = #{applicationStatus},
+            application_progress = #{applicationProgress},
+            current_step = #{currentStep},
+            target_countries = #{targetCountries},
+            advisor_id = #{advisorId},
+            notes = #{notes},
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+    
+    <insert id="insert" parameterType="com.study.service.students.Student">
+        INSERT INTO students (
+            user_id,
+            name,
+            english_name,
+            gender,
+            birth_date,
+            nationality,
+            passport_no,
+            phone,
+            email,
+            wechat,
+            current_school,
+            major,
+            gpa,
+            gpa_scale,
+            toefl,
+            ielts,
+            gre,
+            gmat,
+            application_status,
+            application_progress,
+            current_step,
+            target_countries,
+            advisor_id,
+            notes,
+            create_time,
+            update_time
+        ) VALUES (
+            #{userId},
+            #{name},
+            #{englishName},
+            #{gender},
+            #{birthDate,jdbcType=DATE},
+            #{nationality},
+            #{passportNo},
+            #{phone},
+            #{email},
+            #{wechat},
+            #{currentSchool},
+            #{major},
+            #{gpa},
+            #{gpaScale},
+            #{toefl},
+            #{ielts},
+            #{gre},
+            #{gmat},
+            #{applicationStatus},
+            #{applicationProgress},
+            #{currentStep},
+            #{targetCountries},
+            #{advisorId},
+            #{notes},
+            NOW(),
+            NOW()
+        )
+    </insert>
+    
+    <select id="getStudentGPA" resultType="com.study.service.students.StudentGPA">
+        SELECT 
+            user_id as userId,
+            gpa_scale as gpaScale,
+            gpa as gpaScore
+        FROM students 
+        WHERE user_id = #{userId}
+    </select>
+    
+    <select id="getAllStudents" resultMap="StudentMap">
+        SELECT 
+            id,
+            user_id,
+            name,
+            english_name,
+            gender,
+            birth_date,
+            nationality,
+            passport_no,
+            phone,
+            email,
+            wechat,
+            current_school,
+            major,
+            gpa,
+            gpa_scale,
+            toefl,
+            ielts,
+            gre,
+            gmat,
+            application_status,
+            application_progress,
+            current_step,
+            target_countries,
+            advisor_id,
+            notes,
+            create_time,
+            update_time
+        FROM students
+        ORDER BY id DESC
+    </select>
+    
+    <delete id="deleteById">
+        DELETE FROM students WHERE id = #{id}
+    </delete>
+    
+    <select id="getStudentById" resultMap="StudentMap">
+        SELECT 
+            id,
+            user_id,
+            name,
+            english_name,
+            gender,
+            birth_date,
+            nationality,
+            passport_no,
+            phone,
+            email,
+            wechat,
+            current_school,
+            major,
+            gpa,
+            gpa_scale,
+            toefl,
+            ielts,
+            gre,
+            gmat,
+            application_status,
+            application_progress,
+            current_step,
+            target_countries,
+            advisor_id,
+            notes,
+            create_time,
+            update_time
+        FROM students
+        WHERE id = #{id}
+    </select>
+    
+</mapper>

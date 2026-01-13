@@ -1,0 +1,111 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Vue.js 项目结构指南
+
+## 目录结构
+
+采用功能式目录结构，按职责和功能组织文件：
+
+```
+src/
+├── assets/                  # 静态资源文件
+│   ├── images/              # 图片资源
+│   └── styles/              # 全局样式
+├── components/              # 可复用组件
+│   ├── common/              # 通用组件
+│   └── feature-specific/    # 特性相关组件
+├── composables/             # 可复用的组合式函数
+├── layouts/                 # 布局组件
+├── pages/                   # 页面组件
+├── router/                  # Vue Router 配置
+├── stores/                  # Pinia 状态管理
+├── services/                # API 服务和数据获取
+├── types/                   # 全局 TypeScript 类型定义
+├── utils/                   # 工具函数
+├── App.vue                  # 根组件
+└── main.ts                  # 应用入口
+```
+
+## 命名约定
+
+- **目录名**：使用小写连字符（kebab-case）
+  - 例如：`user-profile/`, `auth-form/`
+  
+- **组件文件名**：使用 PascalCase
+  - 例如：`UserProfile.vue`, `AuthForm.vue`
+  
+- **工具和服务文件名**：使用 camelCase
+  - 例如：`formatDate.ts`, `userService.ts`
+
+- **类型文件名**：使用 PascalCase 加 `.types.ts` 后缀
+  - 例如：`User.types.ts`, `Auth.types.ts`
+
+## 组件组织
+
+根据组件的职责和重用性，将组件分为以下几类：
+
+### 页面组件（Pages）
+
+- 表示路由端点，通常包含业务逻辑
+- 组合多个组件构建完整页面
+- 存放在 `src/pages/` 目录下
+
+### 布局组件（Layouts）
+
+- 定义页面的整体结构
+- 包含如导航栏、侧边栏、页脚等共享元素
+- 存放在 `src/layouts/` 目录下
+
+### 功能组件（Feature Components）
+
+- 特定功能或业务领域的组件
+- 可能只在特定页面使用
+- 存放在相关功能的目录下
+
+### 通用组件（Common Components）
+
+- 高度可复用的组件
+- 与业务逻辑无关
+- 存放在 `src/components/common/` 目录下
+
+## 模块化原则
+
+- 相关功能应放在一起
+- 每个模块应有明确的责任边界
+- 组件应尽可能独立，减少依赖
+
+## 导入顺序
+
+在组件和模块中保持一致的导入顺序：
+
+1. Vue 核心库
+2. 第三方库
+3. 自定义组件
+4. 组合式函数（Composables）
+5. 工具函数
+6. 类型导入
+
+```typescript
+// 1. Vue 核心库
+import { ref, computed, onMounted } from 'vue'
+
+// 2. 第三方库
+import { useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
+
+// 3. 自定义组件
+import BaseButton from '@/components/common/BaseButton.vue'
+import UserCard from '@/components/users/UserCard.vue'
+
+// 4. 组合式函数
+import { useUsers } from '@/composables/useUsers'
+
+// 5. 工具函数
+import { formatDate } from '@/utils/formatDate'
+
+// 6. 类型导入
+import type { User, UserRole } from '@/types'
+```

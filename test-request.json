@@ -1,0 +1,17 @@
+{
+  "region": "英国",
+  "studentInfo": {
+    "userId": 1,
+    "undergraduateSchool": "北京大学",
+    "gpa": 3.8,
+    "gpaScale": "4.0",
+    "targetMajor": "计算机科学",
+    "targetDegree": "硕士",
+    "languageTest": "IELTS",
+    "languageScore": 7.0,
+    "workExperience": "无",
+    "researchExperience": "有相关项目经验",
+    "awards": "优秀学生奖学金",
+    "publications": ""
+  }
+}

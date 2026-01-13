@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.service.application.ApplicationMapper">
+    
+    <!-- 申请字段映射 -->
+    <resultMap id="applicationResultMap" type="com.study.service.application.Application">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="schoolId" column="school_id"/>
+        <result property="majorId" column="major_id"/>
+        <result property="applicationType" column="application_type"/>
+        <result property="status" column="status"/>
+        <result property="applicationSeason" column="application_season"/>
+        <result property="applicationYear" column="application_year"/>
+        <result property="notes" column="notes"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+    
+    <!-- 公共字段列表 -->
+    <sql id="baseColumns">
+        id, user_id, school_id, major_id, application_type, status,
+        application_season, application_year, notes, created_at, updated_at
+    </sql>
+    
+    <!-- 获取所有申请 -->
+    <select id="findAll" resultMap="applicationResultMap">
+        SELECT <include refid="baseColumns" />
+        FROM applications
+        ORDER BY created_at DESC
+    </select>
+    
+    <!-- 根据ID获取申请 -->
+    <select id="findById" resultMap="applicationResultMap">
+        SELECT <include refid="baseColumns" />
+        FROM applications
+        WHERE id = #{id}
+    </select>
+    
+    <!-- 根据用户ID获取所有申请 -->
+    <select id="findByUserId" resultMap="applicationResultMap">
+        SELECT <include refid="baseColumns" />
+        FROM applications
+        WHERE user_id = #{userId}
+        ORDER BY created_at DESC
+    </select>
+    
+    <!-- 根据院校ID获取所有申请 -->
+    <select id="findBySchoolId" resultMap="applicationResultMap">
+        SELECT <include refid="baseColumns" />
+        FROM applications
+        WHERE school_id = #{schoolId}
+        ORDER BY created_at DESC
+    </select>
+    
+    <!-- 根据专业ID获取所有申请 -->
+    <select id="findByMajorId" resultMap="applicationResultMap">
+        SELECT <include refid="baseColumns" />
+        FROM applications
+        WHERE major_id = #{majorId}
+        ORDER BY created_at DESC
+    </select>
+    
+    <!-- 根据申请状态获取所有申请 -->
+    <select id="findByStatus" resultMap="applicationResultMap">
+        SELECT <include refid="baseColumns" />
+        FROM applications
+        WHERE status = #{status}
+        ORDER BY created_at DESC
+    </select>
+    
+    <!-- 新增申请 -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO applications (
+            user_id, school_id, major_id, application_type, status,
+            application_season, application_year, notes, created_at, updated_at
+        ) VALUES (
+            #{userId}, #{schoolId}, #{majorId}, #{applicationType}, #{status},
+            #{applicationSeason}, #{applicationYear}, #{notes}, NOW(), NOW()
+        )
+    </insert>
+    
+    <!-- 更新申请信息 -->
+    <update id="update">
+        UPDATE applications
+        SET user_id = #{userId},
+            school_id = #{schoolId},
+            major_id = #{majorId},
+            application_type = #{applicationType},
+            status = #{status},
+            application_season = #{applicationSeason},
+            application_year = #{applicationYear},
+            notes = #{notes},
+            updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 删除申请 -->
+    <delete id="deleteById">
+        DELETE FROM applications WHERE id = #{id}
+    </delete>
+    
+</mapper>

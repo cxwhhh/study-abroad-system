@@ -1,0 +1,88 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Spring Data JPA 使用指南
+
+## 实体类设计
+
+- 使用 `@Entity` 标记 JPA 实体类
+- 使用 `@Table` 指定表名，优先使用显式命名
+- 设计合理的实体关系：
+  - `@OneToOne`：一对一关系
+  - `@OneToMany`/`@ManyToOne`：一对多/多对一关系
+  - `@ManyToMany`：多对多关系
+- 关注级联操作和延迟加载设置
+
+## 实体类示例
+
+```java
+@Entity
+@Table(name = "students")
+public class Student {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(name = "name", nullable = false)
+    private String name;
+    
+    @Column(name = "email", unique = true)
+    private String email;
+    
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Application> applications = new ArrayList<>();
+    
+    // 省略 getter/setter 方法
+}
+```
+
+## Repository 设计
+
+- 继承 `JpaRepository`、`CrudRepository` 或 `PagingAndSortingRepository`
+- 使用方法命名约定自动生成查询
+- 复杂查询使用 `@Query` 注解
+
+## Repository 示例
+
+```java
+public interface StudentRepository extends JpaRepository<Student, Long> {
+    // 方法命名约定查询
+    Optional<Student> findByEmail(String email);
+    List<Student> findByNameContaining(String namePart);
+    
+    // 使用 @Query 注解的自定义查询
+    @Query("SELECT s FROM Student s WHERE s.name = :name AND s.email = :email")
+    Optional<Student> findByNameAndEmail(@Param("name") String name, @Param("email") String email);
+    
+    // 原生 SQL 查询
+    @Query(value = "SELECT * FROM students WHERE status = ?1", nativeQuery = true)
+    List<Student> findByStatus(String status);
+}
+```
+
+## 事务管理
+
+- 使用 `@Transactional` 注解管理事务
+- 在 Service 层使用事务，而非 Repository 层
+- 合理设置事务传播行为和隔离级别
+
+## 性能优化
+
+- 合理使用延迟加载和立即加载
+- 使用 `@EntityGraph` 解决 N+1 查询问题
+- 考虑使用二级缓存 (Hibernate L2 cache)
+- 分页查询处理大数据集
+
+## 审计功能
+
+- 使用 `@CreatedDate`、`@LastModifiedDate` 等审计注解
+- 继承 `AbstractAuditable` 类或实现审计接口
+
+## 最佳实践
+
+- 避免在实体间使用双向的 `FetchType.EAGER`
+- 避免在关联关系中使用 `CascadeType.REMOVE`
+- 使用 DTO 模式限制返回字段
+- 大批量操作使用批处理方法

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.service.matching.rules.UkSchoolGroupFallbackMapper">
+
+    <resultMap id="UkSchoolGroupFallbackMap" type="com.study.service.matching.rules.UkSchoolGroupFallback">
+        <id property="targetSchoolId" column="target_school_id"/>
+        <result property="fallbackStrategy" column="fallback_strategy"/>
+        <result property="defaultGroupCode" column="default_group_code"/>
+        <result property="groupCode985" column="group_code_985"/>
+        <result property="groupCode211" column="group_code_211"/>
+        <result property="groupCodeDoubleFirstClass" column="group_code_double_first_class"/>
+        <result property="groupCodeOtherPublic" column="group_code_other_public"/>
+        <result property="groupCodePrivate" column="group_code_private"/>
+        <result property="groupCodeIndependent" column="group_code_independent"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <select id="findByTargetSchoolId" resultMap="UkSchoolGroupFallbackMap">
+        SELECT
+            target_school_id, fallback_strategy, default_group_code,
+            group_code_985, group_code_211, group_code_double_first_class,
+            group_code_other_public, group_code_private, group_code_independent,
+            created_at, updated_at
+        FROM uk_school_group_fallback
+        WHERE target_school_id = #{targetSchoolId}
+        LIMIT 1
+    </select>
+
+</mapper>
+

@@ -1,0 +1,277 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# API 交互与数据获取指南
+
+## API 服务结构
+
+将 API 调用封装在专门的服务模块中：
+
+```
+src/services/
+├── apiClient.ts        # 基础 HTTP 客户端配置
+├── userService.ts      # 用户相关 API
+├── productService.ts   # 产品相关 API
+└── orderService.ts     # 订单相关 API
+```
+
+## HTTP 客户端配置
+
+使用 Axios 创建统一的 API 客户端：
+
+```typescript
+// src/services/apiClient.ts
+import axios from 'axios'
+
+const apiClient = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
+  timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  }
+})
+
+// 请求拦截器
+apiClient.interceptors.request.use(
+  config => {
+    // 获取 token 并添加到请求头
+    const token = localStorage.getItem('auth_token')
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
+    return config
+  },
+  error => Promise.reject(error)
+)
+
+// 响应拦截器
+apiClient.interceptors.response.use(
+  response => response,
+  error => {
+    // 处理常见错误
+    const { response } = error
+    
+    if (!response) {
+      // 网络错误
+      return Promise.reject(new Error('网络错误，请检查您的连接'))
+    }
+    
+    if (response.status === 401) {
+      // 处理未授权错误
+      // 可以在这里触发登出操作
+    }
+    
+    return Promise.reject(error)
+  }
+)
+
+export default apiClient
+```
+
+## API 服务实现
+
+每个 API 服务应该使用 TypeScript 接口并封装相关请求：
+
+```typescript
+// src/services/userService.ts
+import apiClient from './apiClient'
+import type { User, LoginCredentials, RegisterData } from '@/types'
+
+export const userService = {
+  /**
+   * 用户登录
+   */
+  async login(credentials: LoginCredentials): Promise<User> {
+    const response = await apiClient.post<{ user: User, token: string }>(
+      '/auth/login',
+      credentials
+    )
+    // 存储 token
+    localStorage.setItem('auth_token', response.data.token)
+    return response.data.user
+  },
+  
+  /**
+   * 用户注册
+   */
+  async register(data: RegisterData): Promise<User> {
+    const response = await apiClient.post<{ user: User, token: string }>(
+      '/auth/register',
+      data
+    )
+    localStorage.setItem('auth_token', response.data.token)
+    return response.data.user
+  },
+  
+  /**
+   * 获取当前用户信息
+   */
+  async getCurrentUser(): Promise<User> {
+    const response = await apiClient.get<{ user: User }>('/users/me')
+    return response.data.user
+  },
+  
+  /**
+   * 用户登出
+   */
+  logout(): void {
+    localStorage.removeItem('auth_token')
+  }
+}
+```
+
+## 组合式函数（Composables）
+
+将 API 调用封装在组合式函数中，处理加载状态和错误：
+
+```typescript
+// src/composables/useProducts.ts
+import { ref, computed } from 'vue'
+import type { Product, ProductFilter } from '@/types'
+import { productService } from '@/services/productService'
+
+export function useProducts() {
+  const products = ref<Product[]>([])
+  const isLoading = ref(false)
+  const error = ref<string | null>(null)
+  const totalProducts = ref(0)
+  
+  /**
+   * 获取产品列表
+   */
+  async function fetchProducts(filter?: ProductFilter) {
+    isLoading.value = true
+    error.value = null
+    
+    try {
+      const result = await productService.getProducts(filter)
+      products.value = result.products
+      totalProducts.value = result.total
+    } catch (err) {
+      error.value = err instanceof Error ? err.message : '获取产品失败'
+      products.value = []
+    } finally {
+      isLoading.value = false
+    }
+  }
+  
+  /**
+   * 获取单个产品详情
+   */
+  async function fetchProductById(id: string): Promise<Product | null> {
+    isLoading.value = true
+    error.value = null
+    
+    try {
+      return await productService.getProductById(id)
+    } catch (err) {
+      error.value = err instanceof Error ? err.message : '获取产品详情失败'
+      return null
+    } finally {
+      isLoading.value = false
+    }
+  }
+  
+  return {
+    products,
+    isLoading,
+    error,
+    totalProducts,
+    fetchProducts,
+    fetchProductById
+  }
+}
+```
+
+## 在组件中使用
+
+```vue
+<script setup lang="ts">
+import { onMounted } from 'vue'
+import { useProducts } from '@/composables/useProducts'
+
+const { 
+  products, 
+  isLoading, 
+  error,
+  fetchProducts 
+} = useProducts()
+
+onMounted(() => {
+  fetchProducts({ category: 'electronics', limit: 10 })
+})
+</script>
+
+<template>
+  <div>
+    <div v-if="isLoading" class="loading-spinner">加载中...</div>
+    
+    <div v-else-if="error" class="error-message">
+      {{ error }}
+    </div>
+    
+    <div v-else-if="products.length === 0" class="empty-state">
+      没有找到产品
+    </div>
+    
+    <div v-else class="product-list">
+      <ProductCard 
+        v-for="product in products" 
+        :key="product.id" 
+        :product="product" 
+      />
+    </div>
+  </div>
+</template>
+```
+
+## 数据缓存策略
+
+对于频繁请求的数据，可以使用 VueUse 的 `useStorage` 进行缓存：
+
+```typescript
+import { useStorage } from '@vueuse/core'
+
+// 缓存产品类别列表（不经常变化的数据）
+const cachedCategories = useStorage<Category[]>('product-categories', [])
+
+async function fetchCategories() {
+  // 如果有缓存数据且未过期，直接使用缓存
+  if (cachedCategories.value.length > 0) {
+    return cachedCategories.value
+  }
+  
+  // 否则从 API 获取
+  const result = await productService.getCategories()
+  cachedCategories.value = result
+  return result
+}
+```
+
+## 错误处理
+
+统一处理 API 错误：
+
+```typescript
+// src/utils/errorHandler.ts
+import { useNotification } from '@/composables/useNotification'
+
+const notification = useNotification()
+
+export function handleApiError(error: unknown): void {
+  if (error instanceof Error) {
+    // 根据错误类型或消息显示不同通知
+    if (error.message.includes('timeout')) {
+      notification.error('请求超时，请稍后再试')
+    } else if (error.message.includes('Network Error')) {
+      notification.error('网络连接错误，请检查您的网络')
+    } else {
+      notification.error(error.message)
+    }
+  } else {
+    notification.error('发生未知错误')
+  }
+}

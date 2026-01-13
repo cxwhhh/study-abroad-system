@@ -1,0 +1,47 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# 申请流程指南
+
+本文档描述留学申请的完整流程及对应的系统功能。
+
+## 申请流程概览
+
+学生留学申请的主要流程包括：
+1. 申请准备阶段
+2. 材料准备阶段
+3. 申请提交阶段
+4. 面试准备阶段
+5. 签证申请阶段
+6. 返利申请阶段
+
+## 相关页面
+
+- 申请步骤总览: [src/views/steps/ApplicationSteps.vue](mdc:src/views/steps/ApplicationSteps.vue)
+- 申请准备阶段: [src/views/steps/Preparation.vue](mdc:src/views/steps/Preparation.vue)
+- 材料准备阶段: [src/views/steps/Materials.vue](mdc:src/views/steps/Materials.vue)
+- 申请提交阶段: [src/views/steps/Submission.vue](mdc:src/views/steps/Submission.vue)
+- 面试准备阶段: [src/views/steps/Interview.vue](mdc:src/views/steps/Interview.vue)
+- 签证申请阶段: [src/views/steps/Visa.vue](mdc:src/views/steps/Visa.vue)
+- AI选校推荐: [src/views/steps/AiSelect.vue](mdc:src/views/steps/AiSelect.vue)
+- 申请助手: [src/views/steps/Assistant.vue](mdc:src/views/steps/Assistant.vue)
+- 返利申请: [src/views/steps/Rebate.vue](mdc:src/views/steps/Rebate.vue)
+
+## 状态跟踪
+
+申请状态的主要变化：
+1. 待提交 → 已提交 → 材料审核中 → 面试中 → 录取/拒绝 → 已完成
+
+## 管理员视角
+
+管理员通过以下组件监控申请流程：
+- 申请管理: [src/components/admin/application/ApplicationManagement.vue](mdc:src/components/admin/application/ApplicationManagement.vue)
+- 申请监控: [src/components/admin/application/ApplicationMonitor.vue](mdc:src/components/admin/application/ApplicationMonitor.vue)
+
+## 学生视角
+
+学生通过以下页面跟踪申请进度：
+- 留学申请流程: [src/views/application/study.vue](mdc:src/views/application/study.vue)
+- 申请步骤页面: [src/views/steps/](mdc:src/views/steps)

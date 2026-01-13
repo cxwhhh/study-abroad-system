@@ -1,0 +1,175 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Pinia 状态管理指南
+
+## 基本原则
+
+- 使用 Pinia 代替 Vuex 进行状态管理
+- 按功能域划分 store
+- 遵循最小可访问性原则，只暴露必要的状态和操作
+
+## Store 结构
+
+每个 store 文件应遵循以下结构：
+
+```typescript
+// src/stores/userStore.ts
+import { defineStore } from 'pinia'
+import type { User } from '@/types'
+import { userService } from '@/services/userService'
+
+export const useUserStore = defineStore('user', () => {
+  // 状态（State）
+  const currentUser = ref<User | null>(null)
+  const isLoading = ref(false)
+  const error = ref<string | null>(null)
+  
+  // 计算属性（Getters）
+  const isLoggedIn = computed(() => !!currentUser.value)
+  const userFullName = computed(() => {
+    if (!currentUser.value) return ''
+    return `${currentUser.value.firstName} ${currentUser.value.lastName}`
+  })
+  
+  // 操作（Actions）
+  async function login(email: string, password: string) {
+    isLoading.value = true
+    error.value = null
+    
+    try {
+      currentUser.value = await userService.login(email, password)
+    } catch (err) {
+      error.value = err instanceof Error ? err.message : '登录失败'
+      currentUser.value = null
+    } finally {
+      isLoading.value = false
+    }
+  }
+  
+  function logout() {
+    currentUser.value = null
+    userService.logout()
+  }
+  
+  return {
+    // 暴露状态
+    currentUser,
+    isLoading,
+    error,
+    // 暴露计算属性
+    isLoggedIn,
+    userFullName,
+    // 暴露操作
+    login,
+    logout
+  }
+})
+```
+
+## Store 命名规范
+
+- Store ID 使用 camelCase：`'user'`, `'shoppingCart'`
+- Store 函数使用 `use` 前缀 + 驼峰命名：`useUserStore`, `useShoppingCartStore`
+
+## 组件中使用 Store
+
+在组件中使用 store 时，推荐使用 `storeToRefs` 来保持响应性：
+
+```vue
+<script setup lang="ts">
+import { useUserStore } from '@/stores/userStore'
+import { storeToRefs } from 'pinia'
+
+const userStore = useUserStore()
+// 使用 storeToRefs 解构保持响应性
+const { currentUser, isLoading, error } = storeToRefs(userStore)
+// 直接解构操作方法
+const { login, logout } = userStore
+
+// 用法示例
+function handleLogin() {
+  login(email.value, password.value)
+}
+</script>
+```
+
+## 组织多个 Store
+
+针对不同的领域创建独立的 store，并在需要时组合使用：
+
+```
+src/stores/
+├── userStore.ts      # 用户相关状态
+├── productStore.ts   # 产品相关状态
+├── cartStore.ts      # 购物车相关状态
+└── settingsStore.ts  # 应用设置相关状态
+```
+
+## Store 之间的交互
+
+store 之间需要交互时，可以直接导入其他 store：
+
+```typescript
+// src/stores/cartStore.ts
+import { defineStore } from 'pinia'
+import { useProductStore } from './productStore'
+import { useUserStore } from './userStore'
+
+export const useCartStore = defineStore('cart', () => {
+  // 状态
+  const items = ref([])
+  
+  // 在操作中使用其他 store
+  function addToCart(productId: string, quantity: number) {
+    const productStore = useProductStore()
+    const userStore = useUserStore()
+    
+    // 检查用户是否登录
+    if (!userStore.isLoggedIn) {
+      throw new Error('请先登录')
+    }
+    
+    // 获取产品信息
+    const product = productStore.getProductById(productId)
+    if (!product) {
+      throw new Error('产品不存在')
+    }
+    
+    // 添加到购物车逻辑
+    // ...
+  }
+  
+  return {
+    items,
+    addToCart
+  }
+})
+```
+
+## 持久化状态
+
+使用 `pinia-plugin-persistedstate` 进行状态持久化：
+
+```typescript
+// src/stores/userStore.ts
+export const useUserStore = defineStore('user', () => {
+  // store 实现...
+}, {
+  persist: {
+    key: 'user-storage',
+    storage: localStorage,
+    paths: ['currentUser'] // 只持久化特定字段
+  }
+})
+```
+
+## 最佳实践
+
+- 避免在 store 中存储可以派生的状态，使用计算属性代替
+- 状态应该是最小的完整表示
+- 使用异步操作处理 API 请求
+- 利用 TypeScript 提供完整的类型支持
+- 在操作内部处理错误，保持组件干净

@@ -1,0 +1,63 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# TypeScript 和 Vue.js 代码风格指南
+
+## 编程范式
+
+- 使用函数式和声明式编程模式，避免使用类
+- 优先使用纯函数，便于测试和维护
+- 遵循 DRY 原则，避免代码重复
+
+
+
+## 命名规范
+
+- 使用描述性变量名，加入助动词增强可读性
+- 布尔值使用 `is`、`has`、`should` 等前缀
+- 函数使用动词开头，表明行为
+
+
+## Vue 组件风格
+
+- 始终使用 Composition API 与 `<script setup>` 语法
+- 导出时使用命名导出而非默认导出
+- 组件状态逻辑和视图逻辑分离
+
+```vue
+<!-- ✅ 推荐：使用 script setup 语法 -->
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+import type { User } from '@/types'
+
+const props = defineProps<{
+  user: User
+}>()
+
+const isActive = ref(false)
+const displayName = computed(() => `${props.user.firstName} ${props.user.lastName}`)
+
+function toggleActive(): void {
+  isActive.value = !isActive.value
+}
+</script>
+```
+
+
+
+## 文件组织
+
+- 每个文件仅包含相关内容
+- 保持组件文件简洁，将辅助函数提取到单独文件
+- 相关类型定义放在同一文件或专用类型文件
+
+```
+components/
+  user-profile/
+    UserProfile.vue         // 主组件
+    UserAvatar.vue          // 子组件
+    useProfileLogic.ts      // 组件逻辑
+    types.ts                // 类型定义
+```

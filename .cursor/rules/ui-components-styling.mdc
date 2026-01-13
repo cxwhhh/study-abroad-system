@@ -1,0 +1,192 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# UI 组件和样式指南
+
+## UI 框架搭配
+
+本项目同时使用 Element Plus 和 Tailwind CSS，它们各自有不同的职责：
+
+- **Element Plus**：提供功能丰富的 UI 组件（表单控件、模态框、表格等）
+- **Tailwind CSS**：提供原子化 CSS 工具，用于快速构建自定义 UI
+
+### 组件选择原则
+
+- 复杂交互组件使用 Element Plus（如数据表格、日期选择器等）
+- 布局和简单 UI 元素使用 Tailwind CSS 构建
+- 在 Element Plus 组件基础上使用 Tailwind 进行微调
+
+## Tailwind CSS 使用
+
+### 响应式设计
+
+使用 Tailwind 的响应式前缀实现移动优先设计：
+
+```vue
+<template>
+  <!-- 移动端垂直排列，PC 端水平排列 -->
+  <div class="flex flex-col md:flex-row gap-4">
+    <div class="w-full md:w-1/3">侧边栏</div>
+    <div class="w-full md:w-2/3">主内容</div>
+  </div>
+</template>
+```
+
+### 常见响应式断点
+
+- `sm`: ≥ 640px（小屏幕设备）
+- `md`: ≥ 768px（中等屏幕设备）
+- `lg`: ≥ 1024px（大屏幕设备）
+- `xl`: ≥ 1280px（超大屏幕设备）
+- `2xl`: ≥ 1536px（巨大屏幕设备）
+
+### 避免内联样式
+
+```vue
+<!-- ✅ 推荐：使用 Tailwind 类 -->
+<div class="mt-4 text-gray-700 font-medium">
+  内容
+</div>
+
+<!-- ❌ 避免：内联样式 -->
+<div style="margin-top: 1rem; color: #4b5563; font-weight: 500;">
+  内容
+</div>
+```
+
+### 组件样式封装
+
+对于重复使用的 UI 模式，创建可复用组件而非重复 Tailwind 类：
+
+```vue
+<!-- ✅ 推荐：抽象为组件 -->
+<template>
+  <CardContainer>
+    <CardHeader>标题</CardHeader>
+    <CardBody>内容</CardBody>
+  </CardContainer>
+</template>
+
+<!-- ❌ 避免：重复使用大量相同的类 -->
+<div class="bg-white rounded-lg shadow-md p-4">
+  <h3 class="text-xl font-bold mb-2">标题</h3>
+  <div class="text-gray-700">内容</div>
+</div>
+```
+
+## Element Plus 使用
+
+### 全局组件注册
+
+仅注册常用组件，避免全量导入：
+
+```typescript
+// main.ts
+import { createApp } from 'vue'
+import App from './App.vue'
+import {
+  ElButton,
+  ElTable,
+  ElPagination,
+  ElDialog,
+  ElForm,
+  ElInput
+} from 'element-plus'
+import 'element-plus/dist/index.css'
+
+const app = createApp(App)
+const components = [
+  ElButton,
+  ElTable,
+  ElPagination,
+  ElDialog,
+  ElForm,
+  ElInput
+]
+
+components.forEach(component => {
+  app.component(component.name, component)
+})
+```
+
+### Element Plus 自定义主题
+
+自定义 Element Plus 主题以匹配项目设计：
+
+```typescript
+// element-variables.scss
+@forward 'element-plus/theme-chalk/src/common/var.scss' with (
+  $colors: (
+    'primary': (
+      'base': #4f46e5,
+    ),
+    'success': (
+      'base': #10b981,
+    ),
+    'warning': (
+      'base': #f59e0b,
+    ),
+    'danger': (
+      'base': #ef4444,
+    ),
+  )
+);
+```
+
+## Headless UI 组合
+
+使用 Headless UI 组件实现无样式但具有可访问性的互动组件：
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
+</script>
+
+<template>
+  <Menu as="div" class="relative inline-block text-left">
+    <MenuButton class="btn">
+      选项
+    </MenuButton>
+    <transition
+      enter-active-class="transition duration-100 ease-out"
+      enter-from-class="transform scale-95 opacity-0"
+      enter-to-class="transform scale-100 opacity-100"
+      leave-active-class="transition duration-75 ease-in"
+      leave-from-class="transform scale-100 opacity-100"
+      leave-to-class="transform scale-95 opacity-0"
+    >
+      <MenuItems class="absolute z-10 mt-2 w-56 rounded-md bg-white shadow-lg">
+        <MenuItem v-slot="{ active }">
+          <button
+            :class="[
+              active ? 'bg-indigo-500 text-white' : 'text-gray-700',
+              'block w-full text-left px-4 py-2 text-sm'
+            ]"
+          >
+            编辑
+          </button>
+        </MenuItem>
+        <MenuItem v-slot="{ active }">
+          <button
+            :class="[
+              active ? 'bg-indigo-500 text-white' : 'text-gray-700',
+              'block w-full text-left px-4 py-2 text-sm'
+            ]"
+          >
+            删除
+          </button>
+        </MenuItem>
+      </MenuItems>
+    </transition>
+  </Menu>
+</template>
+```
+
+## 设计一致性
+
+- 使用设计令牌（Design Tokens）确保一致性
+- 创建和使用可复用的组件而非重复实现
+- 维护颜色和间距的统一标准

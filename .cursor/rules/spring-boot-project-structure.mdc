@@ -1,0 +1,52 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Spring Boot 项目结构指南
+
+## 标准分层架构
+
+- `controller`：处理 HTTP 请求，返回响应
+- `service`：处理业务逻辑
+- `repository`：数据访问层
+- `entity`/`model`：数据实体/模型
+- `dto`：数据传输对象
+- `config`：应用配置
+- `exception`：自定义异常
+- `util`：工具类
+
+## 包结构示例
+
+```
+com.study
+├── controller    # REST API 控制器
+├── service       # 业务服务
+│   ├── impl      # 服务实现
+├── repository    # 数据访问层
+├── entity        # 数据实体
+├── dto           # 数据传输对象
+├── config        # 配置类
+├── exception     # 异常处理
+├── util          # 工具类
+└── StudyAbroadApplication.java  # 应用入口
+```
+
+## 配置文件组织
+
+- `application.properties`/`application.yml`：主配置文件
+- `application-dev.yml`：开发环境配置
+- `application-test.yml`：测试环境配置
+- `application-prod.yml`：生产环境配置
+
+## 静态资源
+
+- `src/main/resources/static/`：存放静态资源（CSS、JS、图像）
+- `src/main/resources/templates/`：存放模板文件（Thymeleaf 等）
+
+## 单元测试结构
+
+- 测试类遵循 `*Test` 命名规范
+- 每个源代码包对应一个测试包
+- 集成测试使用 `@SpringBootTest`
+- 单元测试使用 Mock 隔离依赖

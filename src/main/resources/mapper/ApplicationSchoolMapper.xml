@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.service.applicationschool.ApplicationSchoolMapper">
+    
+    <resultMap id="ApplicationSchoolMap" type="com.study.service.applicationschool.ApplicationSchool">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="school_id" property="schoolId"/>
+        <result column="major_id" property="majorId"/>
+        <result column="country_id" property="countryId"/>
+        <result column="student_id" property="studentId"/>
+        <result column="school_name" property="schoolName"/>
+        <result column="major_name" property="majorName"/>
+        <result column="country" property="country"/>
+        <result column="major" property="major"/>
+        <result column="degree" property="degree"/>
+        <result column="code" property="code"/>
+        <result column="entry_date" property="entryDate"/>
+        <result column="duration" property="duration"/>
+        <result column="campus" property="campus"/>
+        <result column="credit_exemption" property="creditExemption"/>
+        <result column="application_status" property="applicationStatus"/>
+        <result column="submit_time" property="submitTime"/>
+        <result column="link" property="link"/>
+        <result column="application_deadline" property="applicationDeadline"/>
+        <result column="visa_info_provided" property="visaInfoProvided"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <!-- 学生信息相关字段 -->
+        <result column="student_name" property="studentName"/>
+        <result column="student_email" property="studentEmail"/>
+        <result column="student_major" property="studentMajor"/>
+        <result column="current_school" property="currentSchool"/>
+        <result column="english_name" property="englishName"/>
+        <result column="gender" property="gender"/>
+        <result column="birth_date" property="birthDate"/>
+        <result column="nationality" property="nationality"/>
+        <result column="passport_no" property="passportNo"/>
+        <result column="phone" property="phone"/>
+        <result column="wechat" property="wechat"/>
+        <result column="gpa" property="gpa"/>
+        <!-- 用户信息相关字段 -->
+        <result column="username" property="userName"/>
+        <result column="email" property="userEmail"/>
+    </resultMap>
+    
+    <select id="getApplicationsByUserId" resultMap="ApplicationSchoolMap">
+        SELECT * FROM application_schools WHERE user_id = #{userId}
+        ORDER BY create_time DESC
+    </select>
+    
+    <select id="getById" resultMap="ApplicationSchoolMap">
+        SELECT * FROM application_schools WHERE id = #{id}
+    </select>
+    
+    <insert id="insert" parameterType="com.study.service.applicationschool.ApplicationSchool" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO application_schools (
+            user_id, school_id, major_id, country_id, student_id, 
+            school_name, major_name, country, major, degree,
+            code, entry_date, duration, campus, credit_exemption,
+            application_status, submit_time, link, application_deadline,
+            create_time, update_time
+        ) VALUES (
+            #{userId}, #{schoolId}, #{majorId}, #{countryId}, #{studentId},
+            #{schoolName}, #{majorName}, #{country}, #{major}, #{degree},
+            #{code}, #{entryDate}, #{duration}, #{campus}, #{creditExemption},
+            #{applicationStatus}, #{submitTime}, #{link}, #{applicationDeadline},
+            NOW(), NOW()
+        )
+    </insert>
+    
+    <update id="update" parameterType="com.study.service.applicationschool.ApplicationSchool">
+        UPDATE application_schools
+        SET school_id = #{schoolId},
+            major_id = #{majorId},
+            country_id = #{countryId},
+            school_name = #{schoolName},
+            major_name = #{majorName},
+            country = #{country},
+            major = #{major},
+            degree = #{degree},
+            code = #{code},
+            entry_date = #{entryDate},
+            duration = #{duration},
+            campus = #{campus},
+            credit_exemption = #{creditExemption},
+            application_status = #{applicationStatus},
+            submit_time = #{submitTime},
+            link = #{link},
+            application_deadline = #{applicationDeadline},
+            update_time = NOW()
+        WHERE id = #{id} AND user_id = #{userId}
+    </update>
+    
+    <select id="findByUserId" resultMap="ApplicationSchoolMap">
+        SELECT a.*, 
+               s.name as student_name, s.email as student_email,
+               s.major as student_major, s.current_school, s.english_name,
+               s.gender, s.birth_date, s.nationality, s.passport_no,
+               s.phone, s.wechat, s.gpa,
+               u.username, u.email
+        FROM application_schools a
+        LEFT JOIN students s ON a.student_id = s.id
+        LEFT JOIN users u ON a.user_id = u.id
+        <where>
+            <if test="userId != null">
+                a.user_id = #{userId}
+            </if>
+        </where>
+        ORDER BY a.create_time DESC
+    </select>
+    
+    <select id="findByUserIdAndCountry" resultMap="ApplicationSchoolMap">
+        SELECT a.*, 
+               s.name as student_name, s.email as student_email,
+               s.major as student_major, s.current_school, s.english_name,
+               s.gender, s.birth_date, s.nationality, s.passport_no,
+               s.phone, s.wechat, s.gpa,
+               u.username, u.email
+        FROM application_schools a
+        LEFT JOIN students s ON a.student_id = s.id
+        LEFT JOIN users u ON a.user_id = u.id
+        <where>
+            <if test="userId != null">
+                a.user_id = #{userId}
+            </if>
+            <if test="country != null and country != ''">
+                AND a.country = #{country}
+            </if>
+        </where>
+        ORDER BY a.create_time DESC
+    </select>
+    
+    <update id="updateStatus">
+        UPDATE application_schools 
+        SET application_status = #{status}
+        WHERE id = #{id}
+    </update>
+    
+    <select id="findByStudentId" resultMap="ApplicationSchoolMap">
+        SELECT a.*, 
+               s.name as student_name, s.email as student_email,
+               s.major as student_major, s.current_school, s.english_name,
+               s.gender, s.birth_date, s.nationality, s.passport_no,
+               s.phone, s.wechat, s.gpa,
+               u.username, u.email
+        FROM application_schools a
+        LEFT JOIN students s ON a.student_id = s.id
+        LEFT JOIN users u ON a.user_id = u.id
+        WHERE a.student_id = #{studentId}
+        ORDER BY a.create_time DESC
+    </select>
+</mapper>

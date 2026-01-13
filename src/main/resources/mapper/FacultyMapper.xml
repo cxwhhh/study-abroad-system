@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.service.faculty.FacultyMapper">
+    
+    <!-- 学院字段映射 -->
+    <resultMap id="facultyResultMap" type="com.study.service.faculty.Faculty">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="englishName" column="english_name"/>
+        <result property="schoolId" column="school_id"/>
+        <result property="code" column="code"/>
+        <result property="description" column="description"/>
+        <result property="history" column="history"/>
+        <result property="ranking" column="ranking"/>
+        <result property="deanName" column="dean_name"/>
+        <result property="facultyCount" column="faculty_count"/>
+        <result property="studentCount" column="student_count"/>
+        <result property="website" column="website"/>
+        <result property="imageUrl" column="image_url"/>
+        <result property="featuredPrograms" column="featured_programs"/>
+        <result property="researchAreas" column="research_areas"/>
+        <result property="contactEmail" column="contact_email"/>
+        <result property="contactPhone" column="contact_phone"/>
+        <result property="createdTime" column="created_time"/>
+        <result property="updatedTime" column="updated_time"/>
+        <result property="isDeleted" column="is_deleted"/>
+        <result property="status" column="status"/>
+    </resultMap>
+    
+    <!-- 公共字段列表 -->
+    <sql id="baseColumns">
+        id, name, english_name, school_id, code, description, history, ranking, 
+        dean_name, faculty_count, student_count, website, image_url, 
+        featured_programs, research_areas, contact_email, contact_phone, 
+        created_time, updated_time, is_deleted, status
+    </sql>
+    
+    <!-- 获取所有学院 -->
+    <select id="findAll" resultMap="facultyResultMap">
+        SELECT <include refid="baseColumns" />
+        FROM school_faculties
+        WHERE is_deleted = 0 AND status = 1
+        ORDER BY id ASC
+    </select>
+    
+    <!-- 根据ID获取学院 -->
+    <select id="findById" resultMap="facultyResultMap">
+        SELECT <include refid="baseColumns" />
+        FROM school_faculties
+        WHERE id = #{id} AND is_deleted = 0 AND status = 1
+    </select>
+    
+    <!-- 根据院校ID获取所有学院 -->
+    <select id="findBySchoolId" resultMap="facultyResultMap">
+        SELECT f.*
+        FROM school_faculties f
+        INNER JOIN schools s ON f.school_id = s.id
+        WHERE f.school_id = #{schoolId} 
+        AND f.is_deleted = 0 
+        AND f.status = 1
+        AND s.is_deleted = 0 
+        AND s.status = 1
+        ORDER BY f.id ASC
+    </select>
+    
+    <!-- 新增学院 -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO school_faculties (
+            name, english_name, school_id, code, description, history, ranking,
+            dean_name, faculty_count, student_count, website, image_url,
+            featured_programs, research_areas, contact_email, contact_phone,
+            created_time, updated_time, is_deleted, status
+        ) VALUES (
+            #{name}, #{englishName}, #{schoolId}, #{code}, #{description}, #{history}, #{ranking},
+            #{deanName}, #{facultyCount}, #{studentCount}, #{website}, #{imageUrl},
+            #{featuredPrograms}, #{researchAreas}, #{contactEmail}, #{contactPhone},
+            NOW(), NOW(), 0, 1
+        )
+    </insert>
+    
+    <!-- 更新学院信息 -->
+    <update id="update">
+        UPDATE school_faculties
+        SET name = #{name},
+            english_name = #{englishName},
+            school_id = #{schoolId},
+            code = #{code},
+            description = #{description},
+            history = #{history},
+            ranking = #{ranking},
+            dean_name = #{deanName},
+            faculty_count = #{facultyCount},
+            student_count = #{studentCount},
+            website = #{website},
+            image_url = #{imageUrl},
+            featured_programs = #{featuredPrograms},
+            research_areas = #{researchAreas},
+            contact_email = #{contactEmail},
+            contact_phone = #{contactPhone},
+            updated_time = NOW()
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 删除学院 -->
+    <delete id="deleteById">
+        UPDATE school_faculties SET is_deleted = 1 WHERE id = #{id}
+    </delete>
+    
+</mapper>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.service.consultation.ConsultationMapper">
+    <resultMap id="ConsultationMap" type="com.study.service.consultation.Consultation">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="student_id" property="studentId"/>
+        <result column="consultation_type" property="consultationType"/>
+        <result column="consultation_content" property="consultationContent"/>
+        <result column="status" property="status"/>
+        <result column="consultation_time" property="consultationTime"/>
+        <result column="reply" property="reply"/>
+        <result column="reply_time" property="replyTime"/>
+        <result column="consultant_name" property="consultantName"/>
+        <result column="contact_method" property="contactMethod"/>
+        <result column="contact_info" property="contactInfo"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <!-- 关联的学生信息 -->
+        <result column="student_name" property="studentName"/>
+        <result column="student_email" property="studentEmail"/>
+        <result column="student_phone" property="studentPhone"/>
+        <!-- 关联的用户信息 -->
+        <result column="user_name" property="userName"/>
+        <result column="user_email" property="userEmail"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.study.service.consultation.Consultation" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO consultations (
+            user_id, student_id, consultation_type, consultation_content,
+            status, consultation_time, consultant_name, contact_method,
+            contact_info, create_time, update_time
+        ) VALUES (
+            #{userId}, #{studentId}, #{consultationType}, #{consultationContent},
+            #{status}, #{consultationTime}, #{consultantName}, #{contactMethod},
+            #{contactInfo}, #{createTime}, #{updateTime}
+        )
+    </insert>
+
+    <select id="selectById" resultMap="ConsultationMap">
+        SELECT c.*, 
+               s.name as student_name, s.email as student_email, s.phone as student_phone,
+               u.username as user_name, u.email as user_email
+        FROM consultations c
+        LEFT JOIN students s ON c.student_id = s.id
+        LEFT JOIN users u ON c.user_id = u.id
+        WHERE c.id = #{id}
+    </select>
+
+    <update id="updateStatus">
+        UPDATE consultations 
+        SET status = #{status},
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <select id="findByUserId" resultMap="ConsultationMap">
+        SELECT c.*, 
+               s.name as student_name, s.email as student_email, s.phone as student_phone,
+               u.username as user_name, u.email as user_email
+        FROM consultations c
+        LEFT JOIN students s ON c.student_id = s.id
+        LEFT JOIN users u ON c.user_id = u.id
+        WHERE c.user_id = #{userId}
+        ORDER BY c.create_time DESC
+    </select>
+</mapper>

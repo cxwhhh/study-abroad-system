@@ -1,0 +1,68 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Spring Boot 注解使用指南
+
+## 核心注解
+
+- `@SpringBootApplication`：应用程序入口点，组合了 `@Configuration`、`@EnableAutoConfiguration` 和 `@ComponentScan`
+- `@Component`：通用组件标记
+- `@Service`：业务逻辑层组件
+- `@Repository`：数据访问层组件
+- `@Controller`：MVC 控制器组件
+- `@RestController`：REST API 控制器（组合了 `@Controller` 和 `@ResponseBody`）
+- `@Configuration`：配置类标记
+
+## REST API 注解
+
+- `@RequestMapping`：映射 HTTP 请求
+  - `@GetMapping`：映射 GET 请求
+  - `@PostMapping`：映射 POST 请求
+  - `@PutMapping`：映射 PUT 请求
+  - `@DeleteMapping`：映射 DELETE 请求
+  - `@PatchMapping`：映射 PATCH 请求
+- `@PathVariable`：提取 URL 路径变量
+- `@RequestParam`：提取请求参数
+- `@RequestBody`：提取请求体
+- `@ResponseBody`：将返回值序列化为响应体
+
+## 依赖注入注解
+
+- `@Autowired`：自动装配依赖
+- `@Qualifier`：指定要注入的 bean 名称
+- `@Value`：注入属性值
+- `@Resource`：按名称注入（JSR-250）
+- `@Inject`：按类型注入（JSR-330）
+
+## 配置相关注解
+
+- `@ConfigurationProperties`：绑定外部配置
+- `@EnableConfigurationProperties`：启用 `@ConfigurationProperties` 注解的类
+- `@Profile`：指定环境配置
+- `@PropertySource`：加载外部属性文件
+
+## 切面编程注解
+
+- `@Aspect`：声明切面
+- `@Pointcut`：定义切点
+- `@Before`：前置通知
+- `@After`：后置通知
+- `@AfterReturning`：返回通知
+- `@AfterThrowing`：异常通知
+- `@Around`：环绕通知
+
+## 数据访问注解
+
+- `@Entity`：JPA 实体
+- `@Table`：数据库表映射
+- `@Id`：主键字段
+- `@GeneratedValue`：主键生成策略
+- `@Column`：数据库列映射
+- `@Transactional`：事务管理
+
+## 异常处理注解
+
+- `@ControllerAdvice`：控制器增强，通常用于全局异常处理
+- `@ExceptionHandler`：异常处理方法

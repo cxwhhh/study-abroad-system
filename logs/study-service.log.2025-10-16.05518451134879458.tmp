@@ -1,0 +1,87 @@
+2025-10-17 15:36:31.665 INFO  [main] com.study.StudyAbroadApplication : Starting StudyAbroadApplication using Java 21.0.6 with PID 71564 (/Users/chenxiwen/code/web1/xingyingmei/target/classes started by chenxiwen in /Users/chenxiwen/code/web1/xingyingmei)
+2025-10-17 15:36:31.668 DEBUG [main] com.study.StudyAbroadApplication : Running with Spring Boot v3.1.5, Spring v6.0.13
+2025-10-17 15:36:31.670 INFO  [main] com.study.StudyAbroadApplication : No active profile set, falling back to 1 default profile: "default"
+2025-10-17 15:36:32.382 INFO  [main] o.s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-10-17 15:36:32.457 INFO  [main] o.s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 59 ms. Found 4 JPA repository interfaces.
+2025-10-17 15:36:32.569 DEBUG [main] o.apache.ibatis.logging.LogFactory : Logging initialized using 'class org.apache.ibatis.logging.slf4j.Slf4jImpl' adapter.
+2025-10-17 15:36:32.572 DEBUG [main] o.m.s.mapper.ClassPathMapperScanner : Identified candidate component class: file [/Users/chenxiwen/code/web1/xingyingmei/target/classes/com/study/service/application/ApplicationMapper.class]
+2025-10-17 15:36:32.572 DEBUG [main] o.m.s.mapper.ClassPathMapperScanner : Identified candidate component class: file [/Users/chenxiwen/code/web1/xingyingmei/target/classes/com/study/service/applicationschool/ApplicationSchoolMapper.class]
+2025-10-17 15:36:32.572 DEBUG [main] o.m.s.mapper.ClassPathMapperScanner : Identified candidate component class: file [/Users/chenxiwen/code/web1/xingyingmei/target/classes/com/study/service/consultation/ConsultationMapper.class]
+2025-10-17 15:36:32.572 DEBUG [main] o.m.s.mapper.ClassPathMapperScanner : Identified candidate component class: file [/Users/chenxiwen/code/web1/xingyingmei/target/classes/com/study/service/faculty/FacultyMapper.class]
+2025-10-17 15:36:32.572 DEBUG [main] o.m.s.mapper.ClassPathMapperScanner : Identified candidate component class: file [/Users/chenxiwen/code/web1/xingyingmei/target/classes/com/study/service/files/FileMapper.class]
+2025-10-17 15:36:32.573 DEBUG [main] o.m.s.mapper.ClassPathMapperScanner : Identified candidate component class: file [/Users/chenxiwen/code/web1/xingyingmei/target/classes/com/study/service/imagesload/ImageMapper.class]
+2025-10-17 15:36:32.573 DEBUG [main] o.m.s.mapper.ClassPathMapperScanner : Identified candidate component class: file [/Users/chenxiwen/code/web1/xingyingmei/target/classes/com/study/service/major/MajorMapper.class]
+2025-10-17 15:36:32.573 DEBUG [main] o.m.s.mapper.ClassPathMapperScanner : Identified candidate component class: file [/Users/chenxiwen/code/web1/xingyingmei/target/classes/com/study/service/news/NewsMapper.class]
+2025-10-17 15:36:32.573 DEBUG [main] o.m.s.mapper.ClassPathMapperScanner : Identified candidate component class: file [/Users/chenxiwen/code/web1/xingyingmei/target/classes/com/study/service/schools/SchoolMapper.class]
+2025-10-17 15:36:32.573 DEBUG [main] o.m.s.mapper.ClassPathMapperScanner : Identified candidate component class: file [/Users/chenxiwen/code/web1/xingyingmei/target/classes/com/study/service/students/StudentMapper.class]
+2025-10-17 15:36:32.574 DEBUG [main] o.m.s.mapper.ClassPathMapperScanner : Identified candidate component class: file [/Users/chenxiwen/code/web1/xingyingmei/target/classes/com/study/service/user/UserMapper.class]
+2025-10-17 15:36:32.575 DEBUG [main] o.m.s.mapper.ClassPathMapperScanner : Creating MapperFactoryBean with name 'applicationMapper' and 'com.study.service.application.ApplicationMapper' mapperInterface
+2025-10-17 15:36:32.578 DEBUG [main] o.m.s.mapper.ClassPathMapperScanner : Enabling autowire by type for MapperFactoryBean with name 'applicationMapper'.
+2025-10-17 15:36:32.578 DEBUG [main] o.m.s.mapper.ClassPathMapperScanner : Creating MapperFactoryBean with name 'applicationSchoolMapper' and 'com.study.service.applicationschool.ApplicationSchoolMapper' mapperInterface
+2025-10-17 15:36:32.579 DEBUG [main] o.m.s.mapper.ClassPathMapperScanner : Enabling autowire by type for MapperFactoryBean with name 'applicationSchoolMapper'.
+2025-10-17 15:36:32.579 DEBUG [main] o.m.s.mapper.ClassPathMapperScanner : Creating MapperFactoryBean with name 'consultationMapper' and 'com.study.service.consultation.ConsultationMapper' mapperInterface
+2025-10-17 15:36:32.580 DEBUG [main] o.m.s.mapper.ClassPathMapperScanner : Enabling autowire by type for MapperFactoryBean with name 'consultationMapper'.
+2025-10-17 15:36:32.580 DEBUG [main] o.m.s.mapper.ClassPathMapperScanner : Creating MapperFactoryBean with name 'facultyMapper' and 'com.study.service.faculty.FacultyMapper' mapperInterface
+2025-10-17 15:36:32.580 DEBUG [main] o.m.s.mapper.ClassPathMapperScanner : Enabling autowire by type for MapperFactoryBean with name 'facultyMapper'.
+2025-10-17 15:36:32.580 DEBUG [main] o.m.s.mapper.ClassPathMapperScanner : Creating MapperFactoryBean with name 'fileMapper' and 'com.study.service.files.FileMapper' mapperInterface
+2025-10-17 15:36:32.580 DEBUG [main] o.m.s.mapper.ClassPathMapperScanner : Enabling autowire by type for MapperFactoryBean with name 'fileMapper'.
+2025-10-17 15:36:32.580 DEBUG [main] o.m.s.mapper.ClassPathMapperScanner : Creating MapperFactoryBean with name 'imageMapper' and 'com.study.service.imagesload.ImageMapper' mapperInterface
+2025-10-17 15:36:32.581 DEBUG [main] o.m.s.mapper.ClassPathMapperScanner : Enabling autowire by type for MapperFactoryBean with name 'imageMapper'.
+2025-10-17 15:36:32.581 DEBUG [main] o.m.s.mapper.ClassPathMapperScanner : Creating MapperFactoryBean with name 'majorMapper' and 'com.study.service.major.MajorMapper' mapperInterface
+2025-10-17 15:36:32.582 DEBUG [main] o.m.s.mapper.ClassPathMapperScanner : Enabling autowire by type for MapperFactoryBean with name 'majorMapper'.
+2025-10-17 15:36:32.582 DEBUG [main] o.m.s.mapper.ClassPathMapperScanner : Creating MapperFactoryBean with name 'newsMapper' and 'com.study.service.news.NewsMapper' mapperInterface
+2025-10-17 15:36:32.582 DEBUG [main] o.m.s.mapper.ClassPathMapperScanner : Enabling autowire by type for MapperFactoryBean with name 'newsMapper'.
+2025-10-17 15:36:32.582 DEBUG [main] o.m.s.mapper.ClassPathMapperScanner : Creating MapperFactoryBean with name 'schoolMapper' and 'com.study.service.schools.SchoolMapper' mapperInterface
+2025-10-17 15:36:32.582 DEBUG [main] o.m.s.mapper.ClassPathMapperScanner : Enabling autowire by type for MapperFactoryBean with name 'schoolMapper'.
+2025-10-17 15:36:32.582 DEBUG [main] o.m.s.mapper.ClassPathMapperScanner : Creating MapperFactoryBean with name 'studentMapper' and 'com.study.service.students.StudentMapper' mapperInterface
+2025-10-17 15:36:32.583 DEBUG [main] o.m.s.mapper.ClassPathMapperScanner : Enabling autowire by type for MapperFactoryBean with name 'studentMapper'.
+2025-10-17 15:36:32.583 DEBUG [main] o.m.s.mapper.ClassPathMapperScanner : Creating MapperFactoryBean with name 'userMapper' and 'com.study.service.user.UserMapper' mapperInterface
+2025-10-17 15:36:32.583 DEBUG [main] o.m.s.mapper.ClassPathMapperScanner : Enabling autowire by type for MapperFactoryBean with name 'userMapper'.
+2025-10-17 15:36:33.323 INFO  [main] o.s.b.w.e.tomcat.TomcatWebServer : Tomcat initialized with port(s): 8080 (http)
+2025-10-17 15:36:33.343 INFO  [main] o.a.catalina.core.StandardService : Starting service [Tomcat]
+2025-10-17 15:36:33.343 INFO  [main] o.a.catalina.core.StandardEngine : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-10-17 15:36:33.560 INFO  [main] o.a.c.c.C.[Tomcat].[localhost].[/] : Initializing Spring embedded WebApplicationContext
+2025-10-17 15:36:33.560 INFO  [main] o.s.b.w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1872 ms
+2025-10-17 15:36:33.816 INFO  [main] o.h.jpa.internal.util.LogHelper : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-10-17 15:36:33.969 INFO  [main] org.hibernate.Version : HHH000412: Hibernate ORM core version 6.2.13.Final
+2025-10-17 15:36:33.975 INFO  [main] org.hibernate.cfg.Environment : HHH000406: Using bytecode reflection optimizer
+2025-10-17 15:36:34.313 INFO  [main] o.s.o.j.p.SpringPersistenceUnitInfo : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-10-17 15:36:34.348 INFO  [main] com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Starting...
+2025-10-17 15:36:34.700 INFO  [main] com.zaxxer.hikari.pool.HikariPool : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@53f495f0
+2025-10-17 15:36:34.703 INFO  [main] com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Start completed.
+2025-10-17 15:36:36.642 INFO  [main] o.h.e.t.j.p.i.JtaPlatformInitiator : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-10-17 15:36:36.836 INFO  [main] o.s.o.j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-10-17 15:36:37.046 INFO  [main] o.s.d.j.r.query.QueryEnhancerFactory : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-10-17 15:36:37.521 DEBUG [main] o.m.spring.SqlSessionFactoryBean : Parsed mapper file: 'file [/Users/chenxiwen/code/web1/xingyingmei/target/classes/mapper/ApplicationMapper.xml]'
+2025-10-17 15:36:37.531 DEBUG [main] o.m.spring.SqlSessionFactoryBean : Parsed mapper file: 'file [/Users/chenxiwen/code/web1/xingyingmei/target/classes/mapper/ApplicationSchoolMapper.xml]'
+2025-10-17 15:36:37.536 DEBUG [main] o.m.spring.SqlSessionFactoryBean : Parsed mapper file: 'file [/Users/chenxiwen/code/web1/xingyingmei/target/classes/mapper/ConsultationMapper.xml]'
+2025-10-17 15:36:37.547 DEBUG [main] o.m.spring.SqlSessionFactoryBean : Parsed mapper file: 'file [/Users/chenxiwen/code/web1/xingyingmei/target/classes/mapper/FacultyMapper.xml]'
+2025-10-17 15:36:37.552 DEBUG [main] o.m.spring.SqlSessionFactoryBean : Parsed mapper file: 'file [/Users/chenxiwen/code/web1/xingyingmei/target/classes/mapper/FileMapper.xml]'
+2025-10-17 15:36:37.560 DEBUG [main] o.m.spring.SqlSessionFactoryBean : Parsed mapper file: 'file [/Users/chenxiwen/code/web1/xingyingmei/target/classes/mapper/ImageMapper.xml]'
+2025-10-17 15:36:37.565 DEBUG [main] o.m.spring.SqlSessionFactoryBean : Parsed mapper file: 'file [/Users/chenxiwen/code/web1/xingyingmei/target/classes/mapper/MajorMapper.xml]'
+2025-10-17 15:36:37.568 DEBUG [main] o.m.spring.SqlSessionFactoryBean : Parsed mapper file: 'file [/Users/chenxiwen/code/web1/xingyingmei/target/classes/mapper/NewsMapper.xml]'
+2025-10-17 15:36:37.573 DEBUG [main] o.m.spring.SqlSessionFactoryBean : Parsed mapper file: 'file [/Users/chenxiwen/code/web1/xingyingmei/target/classes/mapper/SchoolMapper.xml]'
+2025-10-17 15:36:37.577 DEBUG [main] o.m.spring.SqlSessionFactoryBean : Parsed mapper file: 'file [/Users/chenxiwen/code/web1/xingyingmei/target/classes/mapper/StudentMapper.xml]'
+2025-10-17 15:36:37.844 WARN  [main] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-10-17 15:36:38.027 WARN  [main] o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2025-10-17 15:36:38.030 INFO  [main] o.s.o.j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-10-17 15:36:38.031 INFO  [main] com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Shutdown initiated...
+2025-10-17 15:36:38.037 INFO  [main] com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Shutdown completed.
+2025-10-17 15:36:38.038 INFO  [main] o.a.catalina.core.StandardService : Stopping service [Tomcat]
+2025-10-17 15:36:38.049 INFO  [main] o.s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-10-17 15:36:38.059 ERROR [main] o.s.b.d.LoggingFailureAnalysisReporter : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+

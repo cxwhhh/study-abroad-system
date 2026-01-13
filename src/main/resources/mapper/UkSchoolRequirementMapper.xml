@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.service.matching.rules.UkSchoolRequirementMapper">
+
+    <resultMap id="UkSchoolRequirementMap" type="com.study.service.matching.rules.UkSchoolRequirement">
+        <id property="id" column="id"/>
+        <result property="targetSchoolId" column="target_school_id"/>
+        <result property="groupCode" column="group_code"/>
+        <result property="degreeReq" column="degree_req"/>
+        <result property="majorCategory" column="major_category"/>
+        <result property="requiredScore" column="required_score"/>
+        <result property="isReject" column="is_reject"/>
+        <result property="version" column="version"/>
+        <result property="effectiveFrom" column="effective_from"/>
+        <result property="effectiveTo" column="effective_to"/>
+        <result property="priority" column="priority"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <select id="findBest" resultMap="UkSchoolRequirementMap">
+        SELECT
+            id, target_school_id, group_code, degree_req, major_category,
+            required_score, is_reject, version, effective_from, effective_to,
+            priority, created_at, updated_at
+        FROM uk_school_requirement
+        WHERE target_school_id = #{targetSchoolId}
+          AND group_code = #{groupCode}
+          AND (effective_from IS NULL OR effective_from &lt;= NOW())
+          AND (effective_to IS NULL OR effective_to &gt; NOW())
+          AND (degree_req = #{degreeReq} OR degree_req IS NULL)
+          AND (major_category = #{majorCategory} OR major_category IS NULL)
+        ORDER BY
+            (major_category IS NOT NULL) DESC,
+            (degree_req IS NOT NULL) DESC,
+            COALESCE(priority, 0) DESC,
+            COALESCE(effective_from, '1970-01-01') DESC,
+            id DESC
+        LIMIT 1
+    </select>
+
+</mapper>
+

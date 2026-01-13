@@ -1,0 +1,48 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# 项目结构指南
+
+星迎美留学是一个全功能的留学申请管理系统，包含学生端和管理员端。本指南提供项目结构概览。
+
+## 前端结构
+
+前端使用Vue.js 3和Element Plus构建。
+
+### 主要入口
+
+- 主应用入口: [src/App.vue](mdc:src/App.vue)
+- 路由配置: [src/router/index.js](mdc:src/router/index.js)
+- 网络请求工具: [src/utils/request.js](mdc:src/utils/request.js)
+
+### 核心页面
+
+- 首页: [src/views/HomeFirst.vue](mdc:src/views/HomeFirst.vue)
+- 留学申请流程: [src/views/application/study.vue](mdc:src/views/application/study.vue)
+- 学校列表: [src/views/SchoolList.vue](mdc:src/views/SchoolList.vue)
+- 学校详情: [src/views/schools.vue](mdc:src/views/schools.vue)
+
+### 申请步骤页面
+
+所有申请步骤相关页面位于 `src/views/steps/` 目录。
+
+### 管理员页面
+
+管理员相关组件位于 `src/components/admin/` 目录，主要入口为 [src/views/admin/admin1.vue](mdc:src/views/admin/admin1.vue)。
+
+## 后端结构
+
+后端使用Spring Boot和MyBatis构建。
+
+### 主要入口
+
+- 主应用类: [src/main/java/com/study/StudyAbroadApplication.java](mdc:src/main/java/com/study/StudyAbroadApplication.java)
+- 跨域配置: [src/main/java/com/study/config/CorsConfig.java](mdc:src/main/java/com/study/config/CorsConfig.java)
+
+### 核心实体
+
+- 学生: [src/main/java/com/study/entity/Student.java](mdc:src/main/java/com/study/entity/Student.java)
+- 申请: [src/main/java/com/study/entity/Application.java](mdc:src/main/java/com/study/entity/Application.java)
+- 学校: [src/main/java/com/study/entity/School.java](mdc:src/main/java/com/study/entity/School.java)

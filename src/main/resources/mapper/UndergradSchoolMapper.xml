@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.service.matching.rules.UndergradSchoolMapper">
+
+    <resultMap id="UndergradSchoolMap" type="com.study.service.matching.rules.UndergradSchool">
+        <id property="id" column="id"/>
+        <result property="canonicalName" column="canonical_name"/>
+        <result property="canonicalEnglishName" column="canonical_english_name"/>
+        <result property="canonicalKey" column="canonical_key"/>
+        <result property="is985" column="is_985"/>
+        <result property="is211" column="is_211"/>
+        <result property="isDoubleFirstClass" column="is_double_first_class"/>
+        <result property="schoolType" column="school_type"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <select id="findById" resultMap="UndergradSchoolMap">
+        SELECT
+            id, canonical_name, canonical_english_name, canonical_key,
+            is_985, is_211, is_double_first_class, school_type,
+            created_at, updated_at
+        FROM undergrad_schools
+        WHERE id = #{id}
+    </select>
+
+    <select id="findByAliasNorm" resultMap="UndergradSchoolMap">
+        SELECT
+            s.id, s.canonical_name, s.canonical_english_name, s.canonical_key,
+            s.is_985, s.is_211, s.is_double_first_class, s.school_type,
+            s.created_at, s.updated_at
+        FROM undergrad_schools s
+        INNER JOIN undergrad_school_aliases a ON a.undergrad_school_id = s.id
+        WHERE a.alias_norm = #{aliasNorm}
+        ORDER BY a.id DESC
+        LIMIT 1
+    </select>
+
+</mapper>
+

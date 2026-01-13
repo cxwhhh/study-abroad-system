@@ -1,0 +1,38 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Java 和 Spring Boot 代码风格指南
+
+## 命名规范
+
+- 类名：使用 PascalCase（大驼峰），如 `UserController`、`OrderService`
+- 方法名和变量名：使用 camelCase（小驼峰），如 `findUserById`、`isOrderValid`
+- 常量：使用 ALL_CAPS（全大写下划线分隔），如 `MAX_RETRY_ATTEMPTS`、`DEFAULT_PAGE_SIZE`
+- 包名：全小写，如 `com.study.controller`
+
+## 代码结构
+
+- 每个类应有单一职责，遵循 SOLID 原则
+- 方法应保持简短，通常不超过 30-50 行
+- 避免过深的嵌套结构（不超过 3 层）
+- 使用构造函数注入优于字段注入
+
+## 注释规范
+
+- 使用 Javadoc 注释所有公共 API
+- 复杂逻辑需添加内联注释说明
+- 方法注释应包含：功能描述、参数说明、返回值说明、异常说明
+
+## 异常处理
+
+- 使用自定义异常类表达业务异常
+- 实现全局异常处理器 `@ControllerAdvice`
+- 不要吞掉异常，始终提供有意义的异常信息
+
+## 代码质量
+
+- 使用 SonarQube 或 SpotBugs 进行静态代码分析
+- 遵循 Java 代码规范和最佳实践
+- 保持代码的可测试性
